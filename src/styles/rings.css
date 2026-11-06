@@ -58,7 +58,7 @@
   z-index: 1;
   color: var(--ink);
   font:
-    800 clamp(18px, 1.5vw, 23px) / 1 Inter,
+    800 clamp(18px, 1.5vw, 23px) / 1 Manrope,
     sans-serif;
   letter-spacing: -0.04em;
 }
