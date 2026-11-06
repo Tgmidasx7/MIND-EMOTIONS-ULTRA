@@ -252,7 +252,7 @@ body[data-theme] .event {
   background: #3ef0cf12;
 }
 .profile-person h2 {
-  font: 800 17px Manrope;
+  font: 800 17px Inter;
   margin: 5px 0 2px;
   color: var(--ink);
 }
@@ -272,7 +272,7 @@ body[data-theme] .event {
   border: 1px solid var(--line);
 }
 .profile-score b {
-  font: 800 21px Manrope;
+  font: 800 21px Inter;
   color: #70c8ff;
 }
 .profile-score small {
@@ -300,7 +300,7 @@ body[data-theme] .event {
   color: var(--copy);
 }
 .profile-progress b {
-  font: 700 9px "DM Sans";
+  font: 700 9px Inter;
   color: var(--accent);
 }
 .profile-progress i {
