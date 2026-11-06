@@ -1,0 +1,23 @@
+/* Mind Emotions Pro — tema triplo inspirado na identidade enviada */
+body[data-theme] { transition:background-color .3s,color .25s; }
+.theme-switcher{display:flex;align-items:center;gap:3px;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--raised)}
+.theme-choice{display:flex;align-items:center;gap:5px;border:0;border-radius:9px;background:transparent;color:var(--muted);padding:7px 9px;font-size:10px;font-weight:700;transition:.18s}
+.theme-choice.active{background:var(--selected);color:var(--accent);box-shadow:0 2px 9px #0002}
+body[data-theme="dark"]{--base:#070916;--raised:#0d1226;--card:rgba(18,24,48,.94);--card2:rgba(26,34,66,.94);--line:rgba(162,182,255,.17);--ink:#f6f8ff;--copy:#cdd5f3;--muted:#94a0cb;--accent:#8fd8ff;--selected:rgba(96,197,255,.16);background-color:var(--base);background-image:radial-gradient(ellipse at 10% 0%,rgba(96,197,255,.12),transparent 42%),radial-gradient(ellipse at 90% 12%,rgba(255,122,168,.09),transparent 38%),radial-gradient(ellipse at 50% 100%,rgba(196,155,255,.08),transparent 48%);color:var(--ink)}
+body[data-theme="light"]{--base:#f2f6fc;--raised:#e8effa;--card:rgba(255,255,255,.96);--card2:#f4f8ff;--line:rgba(28,55,90,.14);--ink:#0f1d33;--copy:#2c3e5a;--muted:#566a86;--accent:#084c94;--selected:rgba(11,99,190,.1);background-color:var(--base);color:var(--ink)}
+body[data-theme="rose"]{--base:#fcf1f5;--raised:#f8e4ec;--card:rgba(255,250,252,.96);--card2:#fceef4;--line:rgba(148,62,99,.17);--ink:#3b1929;--copy:#5e3046;--muted:#84546b;--accent:#8f1747;--selected:rgba(184,41,98,.12);background-color:var(--base);background-image:radial-gradient(ellipse at 10% 0%,rgba(184,41,98,.08),transparent 40%),radial-gradient(ellipse at 90% 12%,rgba(124,66,140,.08),transparent 40%);color:var(--ink)}
+body[data-theme] .sidebar,body[data-theme] .topbar{background:var(--card);border-color:var(--line);color:var(--ink)}
+body[data-theme] .main{background:transparent}
+body[data-theme] .panel,body[data-theme] .metric-card,body[data-theme] .student-switcher,body[data-theme] .family,body[data-theme] .chat-panel,body[data-theme] .quiz-card,body[data-theme] .full-panel{background:var(--card);border-color:var(--line);box-shadow:0 12px 34px -14px #06112b44}
+body[data-theme] .student-chip,body[data-theme] .track,body[data-theme] .mood-summary,body[data-theme] .event-date,body[data-theme] .date-pill,body[data-theme] .soft-button,body[data-theme] .icon-button{background:var(--card2);border-color:var(--line);color:var(--copy)}
+body[data-theme] .student-chip.chosen{background:var(--selected);border-color:var(--accent)}
+body[data-theme] .welcome-row h1,body[data-theme] .panel h3,body[data-theme] .panel-title h3,body[data-theme] .metric-value,body[data-theme] .event b,body[data-theme] .student-chip b,body[data-theme] .family b,body[data-theme] .user b,body[data-theme] .section-heading h2,body[data-theme] .crumb b{color:var(--ink)}
+body[data-theme] .content p,body[data-theme] .content small,body[data-theme] .crumb,body[data-theme] .eyebrow,body[data-theme] .metric-card>small,body[data-theme] .event small,body[data-theme] .student-chip small,body[data-theme] .family small,body[data-theme] .user small{color:var(--muted)}
+body[data-theme] .sidebar .nav-item{color:var(--muted)}body[data-theme] .sidebar .nav-item.active{background:var(--selected);color:var(--accent)}
+body[data-theme] .insight-panel{background:linear-gradient(110deg,var(--card2),var(--card));border-color:var(--line)}
+body[data-theme] .insight-copy p,body[data-theme] .side-note p{color:var(--copy)}
+body[data-theme] .emotion-line,body[data-theme] .grade-line,body[data-theme] .emotion-row{color:var(--copy)}
+body[data-theme] .chat-head,body[data-theme] .chat-compose{border-color:var(--line)}body[data-theme] .message{background:var(--card2);color:var(--ink)}body[data-theme] .chat-compose input{background:transparent;color:var(--ink)}
+body[data-theme] .mobile-tabs{background:color-mix(in srgb,var(--card) 90%,transparent);border-color:var(--line)}body[data-theme] .mobile-tabs button{color:var(--muted)}body[data-theme] .mobile-tabs button.on{color:var(--accent)}
+body[data-theme] .event{border-color:var(--line)}
+@media(max-width:650px){.theme-switcher{gap:1px}.theme-choice{padding:7px 6px}.theme-choice span{font-size:9px}.top-actions{gap:6px}}
