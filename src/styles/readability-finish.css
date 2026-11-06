@@ -1,0 +1,261 @@
+/* Final accessibility pass: larger type, stronger black depth, and more generous spacing. */
+body {
+  font-size: 17px;
+  line-height: 1.58;
+}
+
+body[data-theme]
+  :is(
+    small,
+    .eyebrow,
+    .crumb,
+    .user small,
+    .student-chip small,
+    .metric-card > small,
+    .metric-hint,
+    .section-heading p,
+    .panel-title p,
+    .panel small,
+    .event small,
+    .date-pill,
+    .soft-button,
+    .theme-choice,
+    .switch-title,
+    .quiz-disclaimer,
+    .checkin-entry p,
+    .text-link,
+    .chart-legend,
+    .bar-group small
+  ) {
+  font-size: max(12.5px, 0.82em) !important;
+  line-height: 1.45;
+}
+
+body[data-theme]
+  :is(
+    button,
+    input,
+    textarea,
+    select,
+    .sidebar .nav-item,
+    .mobile-tabs button,
+    .tabs-bar button,
+    .subnav button
+  ) {
+  font-size: max(14px, 0.9em);
+  line-height: 1.35;
+}
+
+body[data-theme]
+  :is(
+    .panel,
+    .metric-card,
+    .student-switcher,
+    .family,
+    .chat-panel,
+    .quiz-card,
+    .full-panel,
+    .student-profile-summary,
+    .emotion-pro-card,
+    .family-guidance,
+    .quiz-history
+  ) {
+  box-shadow:
+    0 22px 48px -18px rgba(0, 0, 0, 0.43),
+    0 8px 20px rgba(0, 0, 0, 0.16),
+    0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-block: 8px;
+}
+
+body[data-theme]
+  :is(
+    .track,
+    .emotion-line,
+    .grade-line,
+    .emotion-row,
+    .student-chip,
+    .quiz-question,
+    .quiz-answer,
+    .event,
+    .message,
+    .tabs-bar,
+    .subnav
+  ) {
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+body[data-theme]
+  :is(
+    .track,
+    .emotion-line,
+    .grade-line,
+    .profile-progress i,
+    .progress-track,
+    .chart-bars
+  ) {
+  min-height: 13px;
+}
+
+.track {
+  height: 13px;
+  border-radius: 999px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 3px 9px rgba(0, 0, 0, 0.18);
+}
+
+.track div {
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.24);
+}
+
+.emotion-bars,
+.grade-lines {
+  gap: 16px;
+  padding-block: 18px;
+}
+
+.emotion-line,
+.grade-line,
+.emotion-row {
+  grid-template-columns: minmax(96px, 0.28fr) minmax(70px, 1fr) 42px;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.emotion-line > b,
+.grade-line > b,
+.emotion-row > b {
+  font-size: 13px;
+}
+
+.bar {
+  width: clamp(20px, 2.2vw, 30px);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.32),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.content {
+  padding-bottom: clamp(42px, 6vw, 76px);
+}
+
+.stats-grid,
+.dashboard-grid {
+  gap: clamp(14px, 1.8vw, 22px);
+  margin-bottom: 18px;
+}
+
+body[data-theme]
+  :is(
+    .panel,
+    .metric-card,
+    .student-switcher,
+    .full-panel,
+    .student-profile-summary,
+    .emotion-pro-card,
+    .family-guidance,
+    .quiz-history
+  ) {
+  padding: clamp(18px, 2vw, 26px);
+  border-width: 1.5px;
+}
+
+body[data-theme] :is(.section-heading h2, .panel-title h3, .panel h3) {
+  font-size: clamp(18px, 1.35vw, 21px);
+}
+
+@media (min-width: 651px) and (max-width: 1024px) {
+  body {
+    font-size: 16.5px;
+  }
+  .content {
+    padding: 30px clamp(22px, 4vw, 42px) 58px;
+  }
+  .stats-grid,
+  .dashboard-grid {
+    gap: 18px;
+  }
+  .emotion-line,
+  .grade-line,
+  .emotion-row {
+    grid-template-columns: minmax(86px, 0.32fr) minmax(56px, 1fr) 40px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 650px) {
+  body {
+    font-size: 16px;
+  }
+  .content {
+    padding: 22px 16px 46px;
+  }
+  .stats-grid,
+  .dashboard-grid {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  body[data-theme]
+    :is(
+      .panel,
+      .metric-card,
+      .student-switcher,
+      .full-panel,
+      .student-profile-summary,
+      .emotion-pro-card,
+      .family-guidance,
+      .quiz-history
+    ) {
+    padding: 17px;
+    margin-block: 7px;
+    border-radius: 17px;
+  }
+  body[data-theme] :is(.section-heading h2, .panel-title h3, .panel h3) {
+    font-size: 18px;
+  }
+  body[data-theme]
+    :is(
+      .welcome-row p,
+      .section-heading p,
+      .panel-title p,
+      .metric-hint,
+      .metric-card > small,
+      .student-chip small,
+      .student-chip b
+    ) {
+    font-size: 13px !important;
+  }
+  .emotion-line,
+  .grade-line,
+  .emotion-row {
+    grid-template-columns: minmax(78px, 0.38fr) minmax(54px, 1fr) 38px;
+    gap: 8px;
+    font-size: 12.5px;
+  }
+  .emotion-line > b,
+  .grade-line > b,
+  .emotion-row > b {
+    font-size: 12.5px;
+  }
+  .track {
+    height: 12px;
+  }
+  .metric-card .metric-value {
+    font-size: 26px;
+  }
+  .mobile-tabs {
+    box-shadow: 0 -8px 26px rgba(0, 0, 0, 0.28);
+  }
+}
+
+@media (max-width: 370px) {
+  body {
+    font-size: 15.5px;
+  }
+  .content {
+    padding-inline: 12px;
+  }
+}

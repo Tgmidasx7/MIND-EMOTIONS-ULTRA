@@ -1,0 +1,189 @@
+/* Keep theme controls beside the product identity on every screen size. */
+.sidebar .brand {
+  position: relative;
+}
+
+.sidebar .brand .theme-switcher {
+  position: fixed;
+  z-index: 40;
+  left: clamp(225px, 21vw, 325px);
+  top: 20px;
+  margin: 0;
+  padding: 4px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+.sidebar .brand .theme-choice {
+  min-height: 42px;
+  padding: 8px 12px;
+  font-size: 15px;
+}
+
+/* Increase all supporting copy again while retaining a clear heading hierarchy. */
+body {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+body[data-theme]
+  :is(
+    small,
+    .eyebrow,
+    .crumb,
+    .user small,
+    .student-chip small,
+    .metric-card > small,
+    .metric-hint,
+    .section-heading p,
+    .panel-title p,
+    .panel small,
+    .event small,
+    .date-pill,
+    .soft-button,
+    .theme-choice,
+    .switch-title,
+    .quiz-disclaimer,
+    .checkin-entry p,
+    .text-link,
+    .chart-legend,
+    .bar-group small
+  ) {
+  font-size: max(14px, 0.84em) !important;
+  line-height: 1.45;
+}
+
+body[data-theme]
+  :is(
+    button,
+    input,
+    textarea,
+    select,
+    .sidebar .nav-item,
+    .mobile-tabs button,
+    .tabs-bar button,
+    .subnav button
+  ) {
+  font-size: max(15px, 0.92em);
+}
+
+body[data-theme] :is(.section-heading h2, .panel-title h3, .panel h3) {
+  font-size: clamp(19px, 1.5vw, 23px);
+}
+
+@media (max-width: 980px) and (min-width: 651px) {
+  .sidebar .brand {
+    padding: 0;
+    align-items: center;
+  }
+  .sidebar .brand .theme-switcher {
+    position: static;
+    margin-left: 12px;
+    flex-shrink: 0;
+  }
+  .sidebar .brand .theme-choice {
+    min-height: 40px;
+    padding: 7px 10px;
+  }
+}
+
+@media (max-width: 760px) and (min-width: 651px) {
+  .sidebar .brand .theme-choice span {
+    display: none;
+  }
+  .sidebar .brand .theme-choice {
+    min-width: 40px;
+    justify-content: center;
+    padding: 7px;
+  }
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    display: flex;
+    position: sticky;
+    inset: auto;
+    top: 0;
+    z-index: 40;
+    width: 100%;
+    height: auto;
+    min-height: 66px;
+    padding: 8px 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  }
+  .sidebar .brand {
+    width: 100%;
+    padding: 0;
+    gap: 9px;
+    align-items: center;
+  }
+  .sidebar .brand-icon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+  }
+  .sidebar .brand b {
+    font-size: 16px;
+  }
+  .sidebar .brand small {
+    display: block;
+    font-size: 11px;
+  }
+  .sidebar .brand .theme-switcher {
+    position: static;
+    margin-left: auto;
+    flex-shrink: 0;
+    gap: 2px;
+    padding: 3px;
+  }
+  .sidebar .brand .theme-choice {
+    min-width: 40px;
+    min-height: 42px;
+    justify-content: center;
+    padding: 7px;
+  }
+  .sidebar .brand .theme-choice span {
+    display: none;
+  }
+  .sidebar .family,
+  .sidebar .nav-label,
+  .sidebar nav,
+  .sidebar .sidebar-bottom {
+    display: none;
+  }
+  .main {
+    margin: 0;
+  }
+  .topbar {
+    top: 66px;
+  }
+}
+
+@media (max-width: 370px) {
+  .sidebar {
+    padding-inline: 8px;
+  }
+  .sidebar .brand {
+    gap: 6px;
+  }
+  .sidebar .brand-icon {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+  .sidebar .brand b {
+    font-size: 14px;
+  }
+  .sidebar .brand small {
+    font-size: 10px;
+  }
+  .sidebar .brand .theme-choice {
+    min-width: 36px;
+    min-height: 38px;
+    padding: 5px;
+  }
+}

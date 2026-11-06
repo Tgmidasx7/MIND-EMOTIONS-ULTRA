@@ -1,0 +1,102 @@
+/* Rosé pastel: richer surfaces, clearer edges, and softer depth without a pink wash. */
+body[data-theme="rose"] {
+  --base: #f4e6ec;
+  --raised: #ecd7e1;
+  --card: rgba(250, 238, 244, 0.97);
+  --card2: #f4e3eb;
+  --line: rgba(125, 49, 82, 0.25);
+  --ink: #3b1929;
+  --copy: #593347;
+  --muted: #79556a;
+  --accent: #982e5a;
+  --selected: rgba(171, 58, 101, 0.15);
+  background-color: var(--base);
+  background-image:
+    radial-gradient(
+      ellipse at 10% 8%,
+      rgba(191, 105, 141, 0.15),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 90% 24%,
+      rgba(151, 104, 151, 0.11),
+      transparent 37%
+    ),
+    linear-gradient(145deg, #f6eaf0 0%, #f1e2e9 52%, #f6e9ee 100%);
+}
+
+body[data-theme="rose"]
+  :is(
+    .panel,
+    .metric-card,
+    .student-switcher,
+    .family,
+    .chat-panel,
+    .quiz-card,
+    .full-panel,
+    .student-profile-summary,
+    .emotion-pro-card,
+    .family-guidance,
+    .quiz-pro .quiz-card,
+    .quiz-history
+  ) {
+  background: linear-gradient(
+    145deg,
+    rgba(250, 239, 244, 0.98),
+    rgba(241, 222, 232, 0.97)
+  ) !important;
+  border: 1px solid rgba(125, 49, 82, 0.26);
+  box-shadow:
+    0 16px 34px -18px rgba(80, 31, 53, 0.42),
+    0 3px 10px rgba(125, 49, 82, 0.07);
+}
+
+body[data-theme="rose"]
+  :is(
+    .student-chip,
+    .track,
+    .mood-summary,
+    .event-date,
+    .date-pill,
+    .soft-button,
+    .icon-button,
+    .quiz-question,
+    .quiz-answer,
+    .tabs-bar,
+    .subnav
+  ) {
+  background-color: rgba(239, 219, 229, 0.88);
+  border-color: rgba(125, 49, 82, 0.23);
+}
+
+body[data-theme="rose"] .student-chip.chosen,
+body[data-theme="rose"]
+  :is(.theme-choice.active, .tabs-bar button.active, .subnav button.active) {
+  background: linear-gradient(135deg, #f0cfdd, #ead0dd);
+  border-color: rgba(152, 46, 90, 0.46);
+  box-shadow: 0 4px 14px rgba(125, 49, 82, 0.13);
+}
+
+body[data-theme="rose"]
+  :is(
+    .panel,
+    .metric-card,
+    .student-switcher,
+    .family,
+    .chat-panel,
+    .quiz-card,
+    .full-panel,
+    .student-profile-summary,
+    .emotion-pro-card,
+    .family-guidance,
+    .quiz-history
+  )
+  :is(input, textarea, select) {
+  background: rgba(248, 234, 241, 0.92);
+  border-color: rgba(125, 49, 82, 0.25);
+}
+
+body[data-theme="rose"] :is(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid rgba(152, 46, 90, 0.35);
+  outline-offset: 2px;
+}

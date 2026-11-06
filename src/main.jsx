@@ -1,60 +1,1339 @@
-import React, {useMemo, useState} from 'react';
-import {createRoot} from 'react-dom/client';
-import {LayoutDashboard, Heart, BookOpen, Brain, BarChart3, MessageCircle, CalendarDays, Bell, ChevronRight, ArrowUpRight, Sparkles, Send, Check, Menu, Sun, Moon, Flower2} from 'lucide-react';
-import './style.css';
-import './themes.css';
-import './polish.css';
-import './quiz.css';
-import './theme-contrast.css';
-import './responsive-finish.css';
-import './app-pro.css';
+import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
+import {
+  LayoutDashboard,
+  Heart,
+  BookOpen,
+  Brain,
+  BarChart3,
+  MessageCircle,
+  CalendarDays,
+  Bell,
+  ChevronRight,
+  ArrowUpRight,
+  Sparkles,
+  Send,
+  Check,
+  Menu,
+  Sun,
+  Moon,
+  Flower2,
+} from "lucide-react";
+import { seedStudents } from "./data/students.js";
+import {
+  positiveEmotions as positive,
+  negativeEmotions as negative,
+} from "./data/emotions.js";
+import {
+  average,
+  wellbeing as well,
+  focusScore as focus,
+  engagement,
+  familySummary,
+} from "./domain/metrics.js";
+import { quizQuestions, applyCheckin } from "./domain/checkin.js";
+import { Metric, EmotionRow, Subnav } from "./components/ui.jsx";
+import "./styles/index.css";
 
-const initial=[
- {id:1,name:'Isabela',full:'Isabela Albuquerque',age:14,grade:'9º ano do Ensino Fundamental',emoji:'👩🏽‍🎨',color:'lilac',teacher:'Prof.ª Amanda Farias',grades:[['Português',8.6],['Matemática',7.2],['História',8.4],['Geografia',8.1],['Ciências',9.0],['Artes',9.7],['Inglês',8.2],['Ed. Física',9.4]],pos:[76,82,72,88,78],neg:[24,32,28,19,36],attendance:96,focus:78,history:[64,67,70,72,75,78,80,82],checkins:[{date:'04 nov · exemplo',mood:'Tranquila',energy:'Boa',support:'Conversar',note:'Registro ilustrativo de check-in.'}],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]},
- {id:2,name:'Gabriel',full:'Gabriel Albuquerque',age:16,grade:'2º ano do Ensino Médio',emoji:'🧑🏻‍🎓',color:'mint',teacher:'Prof. Carlos Eduardo',grades:[['Português',7.8],['Matemática',8.9],['História',8.1],['Geografia',8.6],['Ciências',8.4],['Artes',7.9],['Inglês',9.2],['Ed. Física',8.7]],pos:[72,78,84,75,80],neg:[30,24,20,26,31],attendance:98,focus:84,history:[66,69,71,74,76,79,82,84],checkins:[{date:'04 nov · exemplo',mood:'Neutro',energy:'Estável',support:'Ajuda',note:'Registro ilustrativo de check-in.'}],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]},
- {id:3,name:'Manuela',full:'Manuela Albuquerque',age:17,grade:'3º ano do Ensino Médio',emoji:'👩🏾‍🎤',color:'peach',teacher:'Prof.ª Renata Dias',grades:[['Português',9.1],['Matemática',8.2],['História',9.4],['Geografia',9.0],['Ciências',8.8],['Artes',9.3],['Inglês',8.7],['Ed. Física',9.5]],pos:[85,79,88,81,86],neg:[18,27,21,23,29],attendance:97,focus:89,history:[71,74,76,78,81,84,86,89],checkins:[{date:'05 nov · exemplo',mood:'Bem',energy:'Boa',support:'Descanso',note:'Registro ilustrativo de check-in.'}],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]}
+const tabs = [
+  ["home", "Visão geral", LayoutDashboard],
+  ["emotions", "Emocional", Heart],
+  ["grades", "Notas", BookOpen],
+  ["quiz", "Quiz emocional", Brain],
+  ["insights", "Gráficos", BarChart3],
+  ["chat", "Mensagens", MessageCircle],
 ];
-const profileDetails={1:{previousGrades:[8.3,6.8,8.1,7.9,8.7,9.5,8.0,9.2],sleep:'7h 50m',goal:'Consolidar equações e funções em Matemática, avançando gradualmente de 7,2 para 8,0.',streak:12,rewards:940,triggers:[['Mostra Cultural e Laboratório','Fator de impulso','Liderou a identidade visual da feira de Ciências e participou com entusiasmo.','Criatividade'],['Avaliações cronometradas','Contexto para acolher','Relatou insegurança diante de listas longas de Matemática com tempo limitado.','Ansiedade']],plan:['Dividir a revisão de Matemática em blocos curtos, com pausas.','Reconhecer o esforço em Artes e Ciências sem comparar irmãos.','Reservar um momento de conversa sem pauta escolar.'],skills:[['Expressão artística e criativa',95],['Investigação científica',90],['Comunicação e leitura crítica',86],['Raciocínio algébrico',72]],reports:[['Prof.ª Amanda Farias','12 nov','Destaque criativo','Isabela contribui com ideias visuais e colabora bem em projetos em grupo.'],['Prof. Ricardo Menezes','10 nov','Em evolução','Compreende melhor os conceitos quando pode explicar o raciocínio em voz alta.']]},2:{previousGrades:[7.5,8.6,8.0,8.4,8.2,7.8,9.0,8.6],sleep:'7h 15m',goal:'Ampliar repertório e coesão na redação, com meta de estudo progressiva em Português.',streak:18,rewards:1280,triggers:[['Projeto de Robótica','Fator de impulso','Participa com iniciativa nas tarefas práticas e costuma apoiar a equipe.','Coragem'],['Revisão de redação','Contexto para acolher','Pode se frustrar ao revisar textos longos; dividir a revisão em etapas pode ajudar.','Frustração']],plan:['Relacionar temas de tecnologia a exercícios de escrita e argumentação.','Reconhecer constância, colaboração e assiduidade.','Combinar pausas sem telas antes do horário de dormir.'],skills:[['Leitura técnica e repertório',92],['Modelagem matemática',89],['Colaboração em projetos',84],['Argumentação escrita',78]],reports:[['Prof. Carlos Eduardo','11 nov','Participação','Gabriel demonstra raciocínio consistente e colaboração em atividades práticas.'],['Prof.ª Helena Prado','08 nov','Próximo passo','A próxima meta é estruturar melhor os parágrafos de desenvolvimento da redação.']]},3:{previousGrades:[8.9,7.9,9.2,8.8,8.6,9.1,8.5,9.4],sleep:'7h 30m',goal:'Praticar análise combinatória e probabilidade em sessões curtas, mantendo equilíbrio na rotina.',streak:23,rewards:1560,triggers:[['Simulado e redação','Fator de impulso','A rotina planejada parece ajudar Manuela a acompanhar as metas de estudo.','Motivação'],['Escolhas para o futuro','Contexto para acolher','Conversas sobre vestibular podem trazer dúvidas; acolher perguntas sem exigir decisões imediatas.','Ansiedade']],plan:['Celebrar consistência sem fazer de cada conversa uma cobrança por notas.','Manter lazer e atividade física na agenda semanal.','Revisar probabilidade com exercícios graduais e pausas planejadas.'],skills:[['Repertório e produção textual',96],['Análise histórica',93],['Autogestão da rotina',91],['Matemática aplicada',82]],reports:[['Prof.ª Renata Dias','12 nov','Produção textual','Manuela apresenta repertório consistente e boa organização das ideias.'],['Prof. Marcos Vinícius','09 nov','Meta de estudo','A revisão atual está concentrada em análise combinatória e probabilidade.']]}};
-const seedStudents=initial.map(s=>({...s,...profileDetails[s.id]}));
-const positive=['Criatividade','Coragem','Autoestima','Motivação','Felicidade'], negative=['Raiva','Medo','Solidão','Tristeza','Ansiedade'];
-const tabs=[['home','Visão geral',LayoutDashboard],['emotions','Emocional',Heart],['grades','Notas',BookOpen],['quiz','Quiz emocional',Brain],['insights','Gráficos',BarChart3],['chat','Mensagens',MessageCircle]];
-const average=s=>s.grades.reduce((a,x)=>a+x[1],0)/s.grades.length;
-const well=s=>Math.round((s.pos.reduce((a,b)=>a+b,0)/(s.pos.reduce((a,b)=>a+b,0)+s.neg.reduce((a,b)=>a+b,0)))*100);
-const focus=s=>s.focus??Math.round((s.pos[3]+s.pos[0])/2);
-const engagement=s=>Math.round(average(s)*10*.4+well(s)*.25+(s.attendance??96)*.2+focus(s)*.15);
-const quizQuestions=[{id:'mood',title:'Como você se sentiu na maior parte do dia?',options:[['😊','Bem'],['🙂','Ok'],['😐','Neutro'],['😟','Difícil']]},{id:'energy',title:'Como esteve sua energia hoje?',options:[['⚡','Alta'],['🌤️','Boa'],['🔋','Baixa'],['🌙','Pouca']]},{id:'support',title:'O que seria mais útil agora?',options:[['💬','Conversar'],['📚','Ajuda'],['🌿','Descanso'],['🤝','Apoio']]}];
-function App(){
- const [students,setStudents]=useState(seedStudents),[selected,setSelected]=useState(1),[tab,setTab]=useState('home'),[quizAnswers,setQuizAnswers]=useState({}),[quizDone,setQuizDone]=useState(false),[message,setMessage]=useState(''),[theme,setTheme]=useState(()=>localStorage.getItem('mind-theme')||'dark'),[subTab,setSubTab]=useState('mapa'),[gradeFilter,setGradeFilter]=useState('all'),[quizNote,setQuizNote]=useState(''),[sortMode,setSortMode]=useState('default'),[rsvp,setRsvp]=useState(false),[compareOpen,setCompareOpen]=useState(false);
- React.useEffect(()=>{document.body.dataset.theme=theme;localStorage.setItem('mind-theme',theme)},[theme]);
- React.useEffect(()=>{setSubTab(({emotions:'mapa',grades:'boletim',quiz:'checkin',insights:'visao',chat:'mensagens'})[tab]||'mapa')},[tab]);
- const sortedStudents=[...students].sort((a,b)=>sortMode==='engagement'?engagement(b)-engagement(a):sortMode==='wellbeing'?well(b)-well(a):a.id-b.id);
- const familyEng=Math.round(students.reduce((sum,s)=>sum+engagement(s),0)/students.length),familyWell=Math.round(students.reduce((sum,s)=>sum+well(s),0)/students.length),familyAttendance=Math.round(students.reduce((sum,s)=>sum+s.attendance,0)/students.length);
- const student=students.find(s=>s.id===selected); const dateLabel=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date()); const changeStudent=id=>{setSelected(id);setTab('home');setQuizDone(false);setQuizAnswers({});setQuizNote('')};
- const update=s=>setStudents(prev=>prev.map(x=>x.id===s.id?s:x));
- const submitQuiz=()=>{if(Object.keys(quizAnswers).length!==quizQuestions.length)return;const next={...student,pos:[...student.pos],neg:[...student.neg],history:[...student.history],checkins:[...student.checkins]};const mood=quizAnswers.mood,energy=quizAnswers.energy;const moodDelta=[4,2,0,-3][mood];next.pos[4]=Math.max(10,Math.min(98,next.pos[4]+moodDelta));next.pos[2]=Math.max(10,Math.min(98,next.pos[2]+(mood<2?1:-1)));next.neg[4]=Math.max(8,Math.min(90,next.neg[4]+(mood===3?3:mood===2?1:-2)));next.pos[3]=Math.max(10,Math.min(98,next.pos[3]+([3,2,-2,-3][energy])));next.focus=Math.max(20,Math.min(98,next.focus+([2,1,-2,-3][energy])));next.history.push(Math.max(20,Math.min(98,next.history.at(-1)+Math.round((moodDelta+[3,2,-2,-3][energy])/2))));if(next.history.length>8)next.history.shift();next.rewards+=25;next.checkins.unshift({date:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),mood:quizQuestions[0].options[mood][1],energy:quizQuestions[1].options[energy][1],support:quizQuestions[2].options[quizAnswers.support][1],note:quizNote.trim()||'Sem observação adicional.'});update(next);setQuizAnswers({});setQuizNote('');setQuizDone(true)};
- const send=()=>{const text=message.trim();if(!text)return;const userMsg={from:'you',text,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};setStudents(prev=>prev.map(s=>s.id===selected?{...s,messages:[...(s.messages||[]),userMsg]}:s));setMessage('');window.setTimeout(()=>setStudents(prev=>prev.map(s=>s.id===selected?{...s,messages:[...(s.messages||[]),{from:'teacher',text:'Mensagem recebida. Este protótipo não envia mensagens reais; em uma versão conectada, a equipe responderá por este canal.',time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}]}:s)),700)};
- return <div className="app"><aside className="sidebar"><div className="brand"><div className="brand-icon"><Brain size={21}/></div><div><b>mind<span>emotions</span></b><small>ÁREA DA FAMÍLIA</small></div></div><div className="family"><div className="family-avatar">A</div><div><b>Família Albuquerque</b><small>Plano família · 3 alunos</small></div><ChevronRight size={16}/></div><div className="nav-label">MENU PRINCIPAL</div><nav>{tabs.map(([id,label,Icon])=><button key={id} className={tab===id?'nav-item active':'nav-item'} onClick={()=>setTab(id)}><Icon size={18}/><span>{label}</span>{id==='chat'&&<i className="unread"/>}</button>)}</nav><div className="sidebar-bottom"><div className="help-icon">?</div><div><b>Precisa de ajuda?</b><small>Fale com nosso suporte</small></div><ChevronRight size={15}/></div></aside>
- <main className="main"><header className="topbar"><button className="mobile-menu"><Menu/></button><div className="crumb">Área da família <ChevronRight size={15}/><b>{tabs.find(x=>x[0]===tab)?.[1]}</b></div><div className="top-actions"><div className="theme-switcher" role="group" aria-label="Tema visual">{[['dark',Moon,'Escuro'],['light',Sun,'Claro'],['rose',Flower2,'Rosé']].map(([id,Icon,label])=><button key={id} className={theme===id?'theme-choice active':'theme-choice'} onClick={()=>setTheme(id)} aria-pressed={theme===id} title={`Tema ${label}`}><Icon size={14}/><span>{label}</span></button>)}</div><button className="icon-button" aria-label="Notificações"><Bell size={18}/><i/></button><div className="user"><div className="user-avatar">MA</div><span><b>Mariana Albuquerque</b><small>Responsável</small></span><ChevronRight size={15}/></div></div></header>
- <div className="content"><div className="welcome-row"><div><div className="eyebrow">{dateLabel.toLocaleUpperCase('pt-BR')} · DADOS DEMONSTRATIVOS</div><h1>{tab==='home'?'Um ótimo dia, Mariana!':'Olá, Mariana!'} <span>✦</span></h1><p>Acompanhe de perto o desenvolvimento dos seus filhos.</p></div><button className="date-pill"><CalendarDays size={16}/> Este mês <ChevronRight size={14}/></button></div>
- {tab==='home'&&<section className="family-kpis"><div><span>👨‍👩‍👧‍👦</span><small>PERFIS</small><b>3 <i>estudantes</i></b></div><div><span>⚡</span><small>ENGAJAMENTO MÉDIO</small><b>{familyEng}%</b></div><div><span>💚</span><small>BEM-ESTAR MÉDIO</small><b>{familyWell}%</b></div><div><span>🎓</span><small>FREQUÊNCIA MÉDIA</small><b>{familyAttendance}%</b></div></section>}
- <section className="student-switcher"><div className="switch-title"><div><b>Seus filhos</b><span>Selecione um perfil para acompanhar</span></div><div className="family-actions"><button className={sortMode==='default'?'family-action active':'family-action'} onClick={()=>setSortMode('default')}>Todos</button><button className={sortMode==='engagement'?'family-action active':'family-action'} onClick={()=>setSortMode('engagement')}>⚡ Engajamento</button><button className={sortMode==='wellbeing'?'family-action active':'family-action'} onClick={()=>setSortMode('wellbeing')}>💚 Bem-estar</button><button className="family-action" onClick={()=>setCompareOpen(true)}>⇄ Comparar</button></div></div><div className="student-list">{sortedStudents.map(s=><button key={s.id} onClick={()=>changeStudent(s.id)} className={`student-chip ${selected===s.id?'chosen':''}`}><div className={`face ${s.color}`}>{s.emoji}</div><span><b>{s.name}</b><small>{s.age} anos · {s.grade}</small></span>{selected===s.id&&<Check className="selected-check" size={17}/>}</button>)}</div></section>
- {tab!=='home'&&<section className="student-profile-summary"><div className={`profile-face ${student.color}`}>{student.emoji}</div><div className="profile-person"><div className="profile-badges"><span>{student.grade}</span><span>🔥 {student.streak} dias seguidos</span></div><h2>{student.full}</h2><p>{student.age} anos · Mentoria: {student.teacher}</p></div><div className="profile-score"><b>{engagement(student)}</b><small>ENGAJAMENTO</small></div><div className="profile-score wellbeing"><b>{well(student)}%</b><small>BEM-ESTAR</small></div><div className="profile-progress">{[['Média geral',Math.round(average(student)*10),'#60c5ff'],['Bem-estar',well(student),'#3ef0cf'],['Frequência',student.attendance,'#ffca57'],['Foco & criatividade',focus(student),'#c49bff']].map(([label,value,color])=><div key={label}><span>{label}</span><b>{value}%</b><i><em style={{width:`${value}%`,background:color}}/></i></div>)}</div></section>}
- {tab==='home'&&<><div className="section-heading"><div><h2>Visão geral <small>Resumo ilustrativo · atualização local</small></h2><p>Resumo do desenvolvimento de {student.name} nesta semana.</p></div><button className="soft-button">Últimos 7 dias⌄</button></div><section className="stats-grid"><Metric icon="📘" name="Média escolar" value={average(student).toFixed(1)} suffix="/ 10" color="purple" hint="Média das disciplinas cadastradas"/><Metric icon="💚" name="Bem-estar" value={well(student)} suffix="%" color="green" hint="Índice estimado pelos check-ins"/><Metric icon="⚡" name="Engajamento" value={engagement(student)} suffix="%" color="orange" hint="Muito bom · acima da média"/><Metric icon="🎯" name="Frequência" value={student.attendance} suffix="%" color="blue" hint="Frequência demonstrativa do período"/></section>
- <section className="dashboard-grid"><div className="panel emotion-panel"><div className="panel-title"><div><h3>Como está se sentindo?</h3><p>Check-in emocional recente</p></div><button className="dots">···</button></div><div className="mood-summary"><div className="mood-face">{student.checkins.length?'📝':'🌿'}</div><div><b>{student.checkins.length?`Check-in: ${student.checkins[0].mood}`:'Nenhum check-in recente'}</b><small>{student.checkins.length?`${student.checkins[0].date} · Energia ${student.checkins[0].energy}`:'Convide seu filho a responder ao quiz emocional'}</small></div><span className="mood-tag">{student.checkins.length?'REGISTRADO':'SEM REGISTRO'}</span></div><div className="emotion-bars">{[['Felicidade',student.pos[4],'#f2af56'],['Motivação',student.pos[3],'#8c71e8'],['Ansiedade',student.neg[4],'#ef8d9c']].map(([n,v,c])=><div className="emotion-line" key={n}><span>{n}</span><div className="track"><div style={{width:`${v}%`,background:c}}/></div><b>{v}%</b></div>)}</div><button className="inline-link" onClick={()=>setTab('emotions')}>Ver perfil emocional <ChevronRight size={15}/></button></div>
- <div className="panel grades-panel"><div className="panel-title"><div><h3>Desempenho escolar</h3><p>Notas mais recentes</p></div><button className="dots">···</button></div><div className="grade-overview"><strong>{average(student).toFixed(1)}</strong><span>/ 10</span><small>média geral <b>↑ 0,4</b></small></div><div className="grade-lines">{student.grades.slice(0,4).map(([n,v],i)=><div className="grade-line" key={n}><span>{n}</span><div className="track"><div style={{width:`${v*10}%`,background:['#8871e8','#55bb9b','#f3ae59','#76a9ef'][i]}}/></div><b>{v.toFixed(1)}</b></div>)}</div><button className="inline-link" onClick={()=>setTab('grades')}>Acessar boletim completo <ChevronRight size={15}/></button></div>
- <div className="panel insight-panel"><div className="insight-icon"><Sparkles size={19}/></div><div className="insight-copy"><span className="eyebrow">INSIGHT DA SEMANA</span><h3>Uma semana de boas descobertas</h3><p>O bem-estar exibido vem de autorrelatos simulados; as notas são uma amostra separada. Os dados não demonstram causa ou correlação. Use o check-in para iniciar uma conversa acolhedora.</p><button className="inline-link" onClick={()=>setTab('insights')}>Explorar insights <ChevronRight size={15}/></button></div><div className="insight-art">✦</div></div>
- <div className="panel activity-panel"><div className="panel-title"><div><h3>Próximos momentos</h3><p>Eventos demonstrativos · confirme com a escola</p></div><button className="inline-link">Ver agenda <ChevronRight size={15}/></button></div><div className="event"><div className="event-date"><b>12</b><small>NOV</small></div><div><b>Conversa com a professora</b><small>12 nov · 16:30 · evento demonstrativo</small></div><ChevronRight size={16}/></div><div className="event"><div className="event-date peach-date"><b>18</b><small>NOV</small></div><div><b>Mostra de projetos escolares</b><small>18 nov · 14:00 · evento demonstrativo</small></div><ChevronRight size={16}/></div><button className={rsvp?'rsvp-button confirmed':'rsvp-button'} onClick={()=>setRsvp(v=>!v)}>{rsvp?'✓ Presença sinalizada (local)':'Confirmar interesse · demonstração'}</button></div></section></>}
- {tab==='emotions'&&<section><Subnav active={subTab} onSelect={setSubTab} items={[["mapa","💚 Mapa emocional"],["gatilhos","🔍 Contexto & gatilhos"],["acolhimento","🧭 Plano de acolhimento"]]}/>{subTab==='mapa'&&<div className="emotion-pro-grid"><div className="panel emotion-pro-card positive-card"><div className="emotion-card-heading"><div><h3>✨ Potências & emoções positivas</h3><p>Forças que estão florescendo · autorrelato simulado</p></div><span className="emotion-total">{Math.round(student.pos.reduce((a,b)=>a+b,0)/5)}% média</span></div>{positive.map((x,i)=><EmotionRow key={x} name={x} value={student.pos[i]} positive/>)}</div><div className="panel emotion-pro-card attention-card"><div className="emotion-card-heading"><div><h3>🌧 Emoções para acolher</h3><p>Não são diagnóstico; convide à conversa</p></div><span className="emotion-total rose-total">{Math.round(student.neg.reduce((a,b)=>a+b,0)/5)}% média</span></div>{negative.map((x,i)=><EmotionRow key={x} name={x} value={student.neg[i]}/>)}</div><div className="panel family-guidance"><span className="guidance-icon">✧</span><div><h3>Como ler estes indicadores</h3><p>As escalas são exemplos de autorrelato e não definem a personalidade nem medem saúde clínica. Use-as como convite para escutar, não como rótulo.</p></div><button className="primary-button" onClick={()=>setTab('quiz')}>Fazer check-in <ChevronRight size={15}/></button></div></div>}{subTab==='gatilhos'&&<div className="trigger-grid">{student.triggers.map(([title,type,description,metric],i)=><article className="panel trigger-card" key={title}><span className={i?'trigger-tag caution':'trigger-tag positive'}>{type}</span><h3>{title}</h3><p>{description}</p><small>Possível tema para conversa: {metric}. Exemplo demonstrativo, não causa comprovada.</small></article>)}</div>}{subTab==='acolhimento'&&<div className="panel family-plan"><div className="plan-heading"><span>🧭</span><div><h3>Plano familiar de apoio · {student.name}</h3><p>Sugestões para diálogo; adaptem à rotina e à vontade do estudante.</p></div></div>{student.plan.map((item,i)=><div className="plan-step" key={item}><b>{String(i+1).padStart(2,'0')}</b><span>{item}</span></div>)}<p className="gentle-note">Se surgir sofrimento persistente ou risco, procure um profissional qualificado ou serviço de saúde. Este app não substitui avaliação.</p></div>}</section>}
- {tab==='grades'&&<section><Subnav active={subTab} onSelect={setSubTab} items={[["boletim","📚 Boletim comparativo"],["metas","🎯 Plano de estudo"],["competencias","🧠 Competências"]]}/>{subTab==='boletim'&&<><div className="grade-summary-grid"><div className="panel grade-summary"><small>MÉDIA ATUAL</small><b>{average(student).toFixed(1)}<i>/10</i></b><span>calculada pelas 8 notas de exemplo</span></div><div className="panel grade-summary"><small>ASSIDUIDADE (SIMULADA)</small><b>{student.attendance}<i>%</i></b><span>não é dado oficial da escola</span></div><div className="panel grade-summary"><small>MATÉRIA PARA REVISAR</small><b>{student.grades.reduce((a,b)=>a[1]<b[1]?a:b)[0]}</b><span>menor nota nesta amostra</span></div></div><div className="panel full-panel"><div className="grade-panel-heading"><div><h3>Notas por disciplina</h3><p>Comparação ilustrativa com o período anterior · sem boletim oficial</p></div><div className="grade-filters">{[['all','Todas'],['high','Destaques'],['attention','Revisar']].map(([id,label])=><button className={gradeFilter===id?'filter-btn active':'filter-btn'} onClick={()=>setGradeFilter(id)} key={id}>{label}</button>)}</div></div>{[...student.grades].sort((a,b)=>b[1]-a[1]).filter(([,grade])=>gradeFilter==='high'?grade>=8.5:gradeFilter==='attention'?grade<8.3:true).map(([subject,grade])=>{const previous=student.previousGrades[student.grades.findIndex(x=>x[0]===subject)];const diff=grade-previous;return <div className="subject" key={subject}><span>{subject}</span><div className="track"><div style={{width:`${grade*10}%`}}/></div><b>{grade.toFixed(1)}</b><small>anterior {previous.toFixed(1)} · {diff>=0?'+':''}{diff.toFixed(1)}</small></div>})}</div></>}{subTab==='metas'&&<div className="panel family-plan"><div className="plan-heading"><span>🎯</span><div><h3>Meta de estudo — {student.name}</h3><p>Objetivo proposto para organização pessoal, sem promessa de resultado.</p></div></div><div className="goal-callout">{student.goal}</div><div className="study-routine">{[['SEG / QUA','Revisão de base','25–30 min de exercícios, com pausa.'],['TER / QUI','Prática aplicada','Resolver questões e registrar dúvidas.'],['SEX / FIM DE SEMANA','Revisão leve e descanso','Planejar a próxima semana sem abrir mão do lazer.']].map(([day,title,description])=><article className="routine-card" key={day}><small>{day}</small><b>{title}</b><p>{description}</p></article>)}</div></div>}{subTab==='competencias'&&<div className="panel full-panel"><h3>Competências em desenvolvimento</h3><p>Rubrica demonstrativa inspirada em competências escolares. Não é avaliação oficial da BNCC.</p>{student.skills.map(([name,value])=><div className="skill-row" key={name}><div><b>{name}</b><span>{value>=90?'Destaque':value>=80?'Em consolidação':'Meta de prática'}</span></div><strong>{value}%</strong><div className="track"><div style={{width:`${value}%`}}/></div></div>)}</div>}</section>}
- {tab==='quiz'&&<section><Subnav active={subTab} onSelect={setSubTab} items={[["checkin","🧩 Check-in de hoje"],["historico","🕒 Diário de check-ins"]]}/>{subTab==='checkin'&&<div className="quiz-pro"><div className="quiz-card"><div className="quiz-kicker"><Brain size={15}/> CHECK-IN SOCIOEMOCIONAL · 1 MINUTO</div><h2>Como foi seu dia, {student.name}?</h2><p>Responda às três perguntas. É um registro de percepção pessoal, não uma avaliação clínica.</p><div className="quiz-question-list">{quizQuestions.map((q,index)=><fieldset className="quiz-question" key={q.id}><legend><span>{String(index+1).padStart(2,'0')}</span>{q.title}</legend><div className="quiz-options">{q.options.map(([emoji,label],choice)=><button type="button" key={label} className={quizAnswers[q.id]===choice?'quiz-answer chosen':'quiz-answer'} aria-pressed={quizAnswers[q.id]===choice} onClick={()=>{setQuizAnswers(v=>({...v,[q.id]:choice}));setQuizDone(false)}}><span className="quiz-emoji">{emoji}</span><small>{label}</small></button>)}</div></fieldset>)}</div><label className="quiz-note-label">Observação rápida (opcional)<input value={quizNote} onChange={e=>setQuizNote(e.target.value)} maxLength={180} placeholder="Uma conquista, dúvida ou algo que queira compartilhar…"/></label>{quizDone?<div className="quiz-feedback"><Check size={16}/> Check-in salvo. Indicadores atualizados e +25 pontos demonstrativos.</div>:<button className="primary-button submit-quiz" disabled={Object.keys(quizAnswers).length!==quizQuestions.length} onClick={submitQuiz}>Registrar check-in <ChevronRight size={15}/></button>}<div className="quiz-disclaimer">🔒 Respostas simuladas neste protótipo e mantidas apenas durante esta sessão. Elas não são diagnóstico nem substituem conversa com a família ou apoio profissional.</div></div><aside className="quiz-history panel"><span className="history-mark">✧</span><h3>Registro recente</h3>{student.checkins.length?student.checkins.slice(0,3).map((c,i)=><div className="checkin-entry" key={i}><b>{c.date}</b><p>Humor: {c.mood} · Energia: {c.energy}</p><small>Precisava de: {c.support}</small></div>):<p>Ainda não há check-ins registrados. Este espaço guarda os registros feitos nesta sessão.</p>}<div className="quiet-note">Um dia difícil também faz parte. O importante é poder falar sobre isso com segurança.</div></aside></div>}{subTab==='historico'&&<div className="panel full-panel"><h3>Diário emocional · {student.name}</h3><p>Registros feitos nesta sessão neste protótipo; não são armazenados em servidor.</p>{student.checkins.length?student.checkins.map((c,i)=><article className="checkin-entry" key={i}><b>{c.date}</b><p>Humor: {c.mood} · Energia: {c.energy} · Apoio: {c.support}</p>{c.note&&<small>{c.note}</small>}</article>):<div className="empty-state">Nenhum check-in registrado ainda. Os registros aparecerão aqui depois de responder às três perguntas.</div>}</div>}</section>}
- {tab==='insights'&&<section><Subnav active={subTab} onSelect={setSubTab} items={[["visao","📈 Painel gráfico"],["matriz","🔬 Hábitos & contexto"]]}/>{subTab==='visao'&&<div className="charts-pro-grid"><div className="panel chart-pro-card"><div className="chart-heading"><div><h3>Indicador semanal</h3><p>Série ilustrativa atualizada após check-in</p></div><span>8 SEM.</span></div><div className="chart-bars">{student.history.map((v,i)=><div className="bar-group" key={i} title={`Semana ${i+1}: ${v}`}><b>{v}</b><div className="bar" style={{height:`${v}%`}}/><small>S{i+1}</small></div>)}</div></div><div className="panel chart-pro-card"><div className="chart-heading"><div><h3>Notas por disciplina</h3><p>Média atual: {average(student).toFixed(1)} / 10</p></div><span>SIMULADO</span></div><div className="grade-chart">{student.grades.map(([name,value])=><div key={name} title={`${name}: ${value}`}><span>{name.slice(0,4)}</span><i><em style={{width:`${value*10}%`}}/></i><b>{value.toFixed(1)}</b></div>)}</div></div><div className="panel chart-pro-card"><div className="chart-heading"><div><h3>Radar emocional</h3><p>5 forças · autorrelato ilustrativo</p></div><span>{well(student)}%</span></div><div className="radar-list">{positive.map((name,i)=><div key={name}><span>{name}</span><i><em style={{width:`${student.pos[i]}%`}}/></i><b>{student.pos[i]}</b></div>)}</div></div><div className="panel chart-footnote"><Sparkles size={18}/><p>Os gráficos descrevem apenas a amostra simulada desta demonstração. Não permitem concluir relações de causa e efeito entre bem-estar e notas.</p></div></div>}{subTab==='matriz'&&<div className="context-grid"><div className="panel context-intro"><span>🔬</span><div><h3>Hábitos e contexto escolar</h3><p>Uma organização para apoiar conversas, não um diagnóstico nem uma correlação validada. Sono e foco abaixo são valores fictícios de demonstração.</p></div></div><div className="panel context-card"><small>ROTINA · SIMULADA</small><b>{student.sleep} <i>de sono ilustrativo</i></b><p>Converse com {student.name} sobre descanso e rotina; não trate este número como medição real.</p></div><div className="panel context-card"><small>ASSIDUIDADE · SIMULADA</small><b>{student.attendance}%</b><p>Exemplo de frequência para demonstrar o painel. Confirme dados oficiais diretamente com a escola.</p></div><div className="panel context-card"><small>OBJETIVO ACADÊMICO · SUGESTÃO</small><b>{student.grades.reduce((a,b)=>a[1]<b[1]?a:b)[0]}</b><p>{student.goal}</p></div></div>}</section>}
- {tab==='chat'&&<section><Subnav active={subTab} onSelect={setSubTab} items={[["mensagens","💬 Mensagens"],["pareceres",`📋 Pareceres (${student.reports.length})`]]}/>{subTab==='mensagens'&&<div className="chat-panel panel"><div className="chat-head"><div className="teacher-avatar">👩🏻‍🏫</div><div><b>{student.teacher}</b><small>Protótipo demonstrativo · mensagens não são enviadas à escola</small></div><span className="online">● Canal demonstrativo</span></div><div className="chat-messages">{(student.messages||[]).map((m,i)=><div className={`message ${m.from==='you'?'mine':''}`} key={i}>{m.text}<small>{m.time||'Registro demonstrativo'}</small></div>)}</div><div className="chat-compose"><input value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} placeholder="Escreva uma mensagem para a professora..."/><button onClick={send}><Send size={17}/></button></div></div>}{subTab==='pareceres'&&<div className="reports-grid">{student.reports.map(([author,date,badge,text])=><article className="panel report-card" key={author}><div className="report-meta"><b>{author}</b><span>{date}</span></div><small>{badge} · relato demonstrativo</small><p>{text}</p></article>)}</div>}</section>}
- </div></main>{compareOpen&&<div className="compare-overlay" onMouseDown={e=>e.target===e.currentTarget&&setCompareOpen(false)}><section className="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title"><div className="compare-head"><h2 id="compare-title">Comparativo familiar</h2><button className="compare-close" onClick={()=>setCompareOpen(false)}>Fechar ×</button></div><p className="compare-legend">Amostras fictícias para comparação visual · não representam avaliação escolar oficial.</p><div className="compare-row"><span>Estudante</span><b>Média</b><b>Bem-estar</b><b>Engaj.</b></div>{students.map(s=><div className="compare-row" key={s.id}><span>{s.emoji} {s.name}</span><b>{average(s).toFixed(1)}</b><b>{well(s)}%</b><b>{engagement(s)}%</b></div>)}</section></div>}<nav className="mobile-tabs">{tabs.map(([id,label,Icon])=><button key={id} className={tab===id?'on':''} onClick={()=>setTab(id)}><Icon size={19}/><small>{label==='Quiz emocional'?'Quiz':label}</small></button>)}</nav></div>
+function App() {
+  const [students, setStudents] = useState(seedStudents),
+    [selected, setSelected] = useState(1),
+    [tab, setTab] = useState("home"),
+    [quizAnswers, setQuizAnswers] = useState({}),
+    [quizDone, setQuizDone] = useState(false),
+    [message, setMessage] = useState(""),
+    [theme, setTheme] = useState(
+      () => localStorage.getItem("mind-theme") || "dark",
+    ),
+    [subTab, setSubTab] = useState("mapa"),
+    [gradeFilter, setGradeFilter] = useState("all"),
+    [quizNote, setQuizNote] = useState(""),
+    [sortMode, setSortMode] = useState("default"),
+    [rsvp, setRsvp] = useState(false),
+    [compareOpen, setCompareOpen] = useState(false);
+  React.useEffect(() => {
+    document.body.dataset.theme = theme;
+    localStorage.setItem("mind-theme", theme);
+  }, [theme]);
+  React.useEffect(() => {
+    setSubTab(
+      {
+        emotions: "mapa",
+        grades: "boletim",
+        quiz: "checkin",
+        insights: "visao",
+        chat: "mensagens",
+      }[tab] || "mapa",
+    );
+  }, [tab]);
+  const sortedStudents = [...students].sort((a, b) =>
+    sortMode === "engagement"
+      ? engagement(b) - engagement(a)
+      : sortMode === "wellbeing"
+        ? well(b) - well(a)
+        : a.id - b.id,
+  );
+  const family = familySummary(students),
+    familyEng = family.engagement,
+    familyWell = family.wellbeing,
+    familyAttendance = family.attendance;
+  const student = students.find((s) => s.id === selected);
+  const dateLabel = new Intl.DateTimeFormat("pt-BR", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+  }).format(new Date());
+  const changeStudent = (id) => {
+    setSelected(id);
+    setTab("home");
+    setQuizDone(false);
+    setQuizAnswers({});
+    setQuizNote("");
+  };
+  const update = (s) =>
+    setStudents((prev) => prev.map((x) => (x.id === s.id ? s : x)));
+  const submitQuiz = () => {
+    if (Object.keys(quizAnswers).length !== quizQuestions.length) return;
+    try {
+      update(applyCheckin(student, quizAnswers, { note: quizNote }));
+      setQuizAnswers({});
+      setQuizNote("");
+      setQuizDone(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const send = () => {
+    const text = message.trim();
+    if (!text) return;
+    const userMsg = {
+      from: "you",
+      text,
+      time: new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    setStudents((prev) =>
+      prev.map((s) =>
+        s.id === selected
+          ? { ...s, messages: [...(s.messages || []), userMsg] }
+          : s,
+      ),
+    );
+    setMessage("");
+    window.setTimeout(
+      () =>
+        setStudents((prev) =>
+          prev.map((s) =>
+            s.id === selected
+              ? {
+                  ...s,
+                  messages: [
+                    ...(s.messages || []),
+                    {
+                      from: "teacher",
+                      text: "Mensagem recebida. Este protótipo não envia mensagens reais; em uma versão conectada, a equipe responderá por este canal.",
+                      time: new Date().toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                    },
+                  ],
+                }
+              : s,
+          ),
+        ),
+      700,
+    );
+  };
+  return (
+    <div className="app">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="brand-icon">
+            <Brain size={21} />
+          </div>
+          <div>
+            <b>
+              mind<span>emotions</span>
+            </b>
+            <small>ÁREA DA FAMÍLIA</small>
+          </div>
+          <div className="theme-switcher" role="group" aria-label="Tema visual">
+            {[
+              ["dark", Moon, "Escuro"],
+              ["light", Sun, "Claro"],
+              ["rose", Flower2, "Rosé"],
+            ].map(([id, Icon, label]) => (
+              <button
+                key={id}
+                className={
+                  theme === id ? "theme-choice active" : "theme-choice"
+                }
+                onClick={() => setTheme(id)}
+                aria-pressed={theme === id}
+                title={`Tema ${label}`}
+              >
+                <Icon size={14} />
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="family">
+          <div className="family-avatar">A</div>
+          <div>
+            <b>Família Albuquerque</b>
+            <small>Plano família · 3 alunos</small>
+          </div>
+          <ChevronRight size={16} />
+        </div>
+        <div className="nav-label">MENU PRINCIPAL</div>
+        <nav>
+          {tabs.map(([id, label, Icon]) => (
+            <button
+              key={id}
+              className={tab === id ? "nav-item active" : "nav-item"}
+              onClick={() => setTab(id)}
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+              {id === "chat" && <i className="unread" />}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="help-icon">?</div>
+          <div>
+            <b>Precisa de ajuda?</b>
+            <small>Fale com nosso suporte</small>
+          </div>
+          <ChevronRight size={15} />
+        </div>
+      </aside>
+      <main className="main">
+        <header className="topbar">
+          <button className="mobile-menu">
+            <Menu />
+          </button>
+          <div className="crumb">
+            Área da família <ChevronRight size={15} />
+            <b>{tabs.find((x) => x[0] === tab)?.[1]}</b>
+          </div>
+          <div className="top-actions">
+            <button className="icon-button" aria-label="Notificações">
+              <Bell size={18} />
+              <i />
+            </button>
+            <div className="user">
+              <div className="user-avatar">MA</div>
+              <span>
+                <b>Mariana Albuquerque</b>
+                <small>Responsável</small>
+              </span>
+              <ChevronRight size={15} />
+            </div>
+          </div>
+        </header>
+        <div className="content">
+          <div className="welcome-row">
+            <div>
+              <div className="eyebrow">
+                {dateLabel.toLocaleUpperCase("pt-BR")} · DADOS DEMONSTRATIVOS
+              </div>
+              <h1>
+                {tab === "home" ? "Um ótimo dia, Mariana!" : "Olá, Mariana!"}{" "}
+                <span>✦</span>
+              </h1>
+              <p>Acompanhe de perto o desenvolvimento dos seus filhos.</p>
+            </div>
+            <button className="date-pill">
+              <CalendarDays size={16} /> Este mês <ChevronRight size={14} />
+            </button>
+          </div>
+          {tab === "home" && (
+            <section className="family-kpis">
+              <div>
+                <span>👨‍👩‍👧‍👦</span>
+                <small>PERFIS</small>
+                <b>
+                  3 <i>estudantes</i>
+                </b>
+              </div>
+              <div>
+                <span>⚡</span>
+                <small>ENGAJAMENTO MÉDIO</small>
+                <b>{familyEng}%</b>
+              </div>
+              <div>
+                <span>💚</span>
+                <small>BEM-ESTAR MÉDIO</small>
+                <b>{familyWell}%</b>
+              </div>
+              <div>
+                <span>🎓</span>
+                <small>FREQUÊNCIA MÉDIA</small>
+                <b>{familyAttendance}%</b>
+              </div>
+            </section>
+          )}
+          <section className="student-switcher">
+            <div className="switch-title">
+              <div>
+                <b>Seus filhos</b>
+                <span>Selecione um perfil para acompanhar</span>
+              </div>
+              <div className="family-actions">
+                <button
+                  className={
+                    sortMode === "default"
+                      ? "family-action active"
+                      : "family-action"
+                  }
+                  onClick={() => setSortMode("default")}
+                >
+                  Todos
+                </button>
+                <button
+                  className={
+                    sortMode === "engagement"
+                      ? "family-action active"
+                      : "family-action"
+                  }
+                  onClick={() => setSortMode("engagement")}
+                >
+                  ⚡ Engajamento
+                </button>
+                <button
+                  className={
+                    sortMode === "wellbeing"
+                      ? "family-action active"
+                      : "family-action"
+                  }
+                  onClick={() => setSortMode("wellbeing")}
+                >
+                  💚 Bem-estar
+                </button>
+                <button
+                  className="family-action"
+                  onClick={() => setCompareOpen(true)}
+                >
+                  ⇄ Comparar
+                </button>
+              </div>
+            </div>
+            <div className="student-list">
+              {sortedStudents.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => changeStudent(s.id)}
+                  className={`student-chip ${selected === s.id ? "chosen" : ""}`}
+                >
+                  <div className={`face ${s.color}`}>{s.emoji}</div>
+                  <span>
+                    <b>{s.name}</b>
+                    <small>
+                      {s.age} anos · {s.grade}
+                    </small>
+                  </span>
+                  {selected === s.id && (
+                    <Check className="selected-check" size={17} />
+                  )}
+                </button>
+              ))}
+            </div>
+          </section>
+          {tab !== "home" && (
+            <section className="student-profile-summary">
+              <div className={`profile-face ${student.color}`}>
+                {student.emoji}
+              </div>
+              <div className="profile-person">
+                <div className="profile-badges">
+                  <span>{student.grade}</span>
+                  <span>🔥 {student.streak} dias seguidos</span>
+                </div>
+                <h2>{student.full}</h2>
+                <p>
+                  {student.age} anos · Mentoria: {student.teacher}
+                </p>
+              </div>
+              <div className="profile-score">
+                <b>{engagement(student)}</b>
+                <small>ENGAJAMENTO</small>
+              </div>
+              <div className="profile-score wellbeing">
+                <b>{well(student)}%</b>
+                <small>BEM-ESTAR</small>
+              </div>
+              <div className="profile-progress">
+                {[
+                  ["Média geral", Math.round(average(student) * 10), "#60c5ff"],
+                  ["Bem-estar", well(student), "#3ef0cf"],
+                  ["Frequência", student.attendance, "#ffca57"],
+                  ["Foco & criatividade", focus(student), "#c49bff"],
+                ].map(([label, value, color]) => (
+                  <div key={label}>
+                    <span>{label}</span>
+                    <b>{value}%</b>
+                    <i>
+                      <em style={{ width: `${value}%`, background: color }} />
+                    </i>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          {tab === "home" && (
+            <>
+              <div className="section-heading">
+                <div>
+                  <h2>
+                    Visão geral{" "}
+                    <small>Resumo ilustrativo · atualização local</small>
+                  </h2>
+                  <p>
+                    Resumo do desenvolvimento de {student.name} nesta semana.
+                  </p>
+                </div>
+                <button className="soft-button">Últimos 7 dias⌄</button>
+              </div>
+              <section className="stats-grid">
+                <Metric
+                  icon="📘"
+                  name="Média escolar"
+                  value={average(student).toFixed(1)}
+                  suffix="/ 10"
+                  color="purple"
+                  hint="Média das disciplinas cadastradas"
+                />
+                <Metric
+                  icon="💚"
+                  name="Bem-estar"
+                  value={well(student)}
+                  suffix="%"
+                  color="green"
+                  hint="Índice estimado pelos check-ins"
+                />
+                <Metric
+                  icon="⚡"
+                  name="Engajamento"
+                  value={engagement(student)}
+                  suffix="%"
+                  color="orange"
+                  hint="Muito bom · acima da média"
+                />
+                <Metric
+                  icon="🎯"
+                  name="Frequência"
+                  value={student.attendance}
+                  suffix="%"
+                  color="blue"
+                  hint="Frequência demonstrativa do período"
+                />
+              </section>
+              <section className="dashboard-grid">
+                <div className="panel emotion-panel">
+                  <div className="panel-title">
+                    <div>
+                      <h3>Como está se sentindo?</h3>
+                      <p>Check-in emocional recente</p>
+                    </div>
+                    <button className="dots">···</button>
+                  </div>
+                  <div className="mood-summary">
+                    <div className="mood-face">
+                      {student.checkins.length ? "📝" : "🌿"}
+                    </div>
+                    <div>
+                      <b>
+                        {student.checkins.length
+                          ? `Check-in: ${student.checkins[0].mood}`
+                          : "Nenhum check-in recente"}
+                      </b>
+                      <small>
+                        {student.checkins.length
+                          ? `${student.checkins[0].date} · Energia ${student.checkins[0].energy}`
+                          : "Convide seu filho a responder ao quiz emocional"}
+                      </small>
+                    </div>
+                    <span className="mood-tag">
+                      {student.checkins.length ? "REGISTRADO" : "SEM REGISTRO"}
+                    </span>
+                  </div>
+                  <div className="emotion-bars">
+                    {[
+                      ["Felicidade", student.pos[4], "#f2af56"],
+                      ["Motivação", student.pos[3], "#8c71e8"],
+                      ["Ansiedade", student.neg[4], "#ef8d9c"],
+                    ].map(([n, v, c]) => (
+                      <div className="emotion-line" key={n}>
+                        <span>{n}</span>
+                        <div className="track">
+                          <div style={{ width: `${v}%`, background: c }} />
+                        </div>
+                        <b>{v}%</b>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="inline-link"
+                    onClick={() => setTab("emotions")}
+                  >
+                    Ver perfil emocional <ChevronRight size={15} />
+                  </button>
+                </div>
+                <div className="panel grades-panel">
+                  <div className="panel-title">
+                    <div>
+                      <h3>Desempenho escolar</h3>
+                      <p>Notas mais recentes</p>
+                    </div>
+                    <button className="dots">···</button>
+                  </div>
+                  <div className="grade-overview">
+                    <strong>{average(student).toFixed(1)}</strong>
+                    <span>/ 10</span>
+                    <small>
+                      média geral <b>↑ 0,4</b>
+                    </small>
+                  </div>
+                  <div className="grade-lines">
+                    {student.grades.slice(0, 4).map(([n, v], i) => (
+                      <div className="grade-line" key={n}>
+                        <span>{n}</span>
+                        <div className="track">
+                          <div
+                            style={{
+                              width: `${v * 10}%`,
+                              background: [
+                                "#8871e8",
+                                "#55bb9b",
+                                "#f3ae59",
+                                "#76a9ef",
+                              ][i],
+                            }}
+                          />
+                        </div>
+                        <b>{v.toFixed(1)}</b>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="inline-link"
+                    onClick={() => setTab("grades")}
+                  >
+                    Acessar boletim completo <ChevronRight size={15} />
+                  </button>
+                </div>
+                <div className="panel insight-panel">
+                  <div className="insight-icon">
+                    <Sparkles size={19} />
+                  </div>
+                  <div className="insight-copy">
+                    <span className="eyebrow">INSIGHT DA SEMANA</span>
+                    <h3>Uma semana de boas descobertas</h3>
+                    <p>
+                      O bem-estar exibido vem de autorrelatos simulados; as
+                      notas são uma amostra separada. Os dados não demonstram
+                      causa ou correlação. Use o check-in para iniciar uma
+                      conversa acolhedora.
+                    </p>
+                    <button
+                      className="inline-link"
+                      onClick={() => setTab("insights")}
+                    >
+                      Explorar insights <ChevronRight size={15} />
+                    </button>
+                  </div>
+                  <div className="insight-art">✦</div>
+                </div>
+                <div className="panel activity-panel">
+                  <div className="panel-title">
+                    <div>
+                      <h3>Próximos momentos</h3>
+                      <p>Eventos demonstrativos · confirme com a escola</p>
+                    </div>
+                    <button className="inline-link">
+                      Ver agenda <ChevronRight size={15} />
+                    </button>
+                  </div>
+                  <div className="event">
+                    <div className="event-date">
+                      <b>12</b>
+                      <small>NOV</small>
+                    </div>
+                    <div>
+                      <b>Conversa com a professora</b>
+                      <small>12 nov · 16:30 · evento demonstrativo</small>
+                    </div>
+                    <ChevronRight size={16} />
+                  </div>
+                  <div className="event">
+                    <div className="event-date peach-date">
+                      <b>18</b>
+                      <small>NOV</small>
+                    </div>
+                    <div>
+                      <b>Mostra de projetos escolares</b>
+                      <small>18 nov · 14:00 · evento demonstrativo</small>
+                    </div>
+                    <ChevronRight size={16} />
+                  </div>
+                  <button
+                    className={rsvp ? "rsvp-button confirmed" : "rsvp-button"}
+                    onClick={() => setRsvp((v) => !v)}
+                  >
+                    {rsvp
+                      ? "✓ Presença sinalizada (local)"
+                      : "Confirmar interesse · demonstração"}
+                  </button>
+                </div>
+              </section>
+            </>
+          )}
+          {tab === "emotions" && (
+            <section>
+              <Subnav
+                active={subTab}
+                onSelect={setSubTab}
+                items={[
+                  ["mapa", "💚 Mapa emocional"],
+                  ["gatilhos", "🔍 Contexto & gatilhos"],
+                  ["acolhimento", "🧭 Plano de acolhimento"],
+                ]}
+              />
+              {subTab === "mapa" && (
+                <div className="emotion-pro-grid">
+                  <div className="panel emotion-pro-card positive-card">
+                    <div className="emotion-card-heading">
+                      <div>
+                        <h3>✨ Potências & emoções positivas</h3>
+                        <p>
+                          Forças que estão florescendo · autorrelato simulado
+                        </p>
+                      </div>
+                      <span className="emotion-total">
+                        {Math.round(student.pos.reduce((a, b) => a + b, 0) / 5)}
+                        % média
+                      </span>
+                    </div>
+                    {positive.map((x, i) => (
+                      <EmotionRow
+                        key={x}
+                        name={x}
+                        value={student.pos[i]}
+                        positive
+                      />
+                    ))}
+                  </div>
+                  <div className="panel emotion-pro-card attention-card">
+                    <div className="emotion-card-heading">
+                      <div>
+                        <h3>🌧 Emoções para acolher</h3>
+                        <p>Não são diagnóstico; convide à conversa</p>
+                      </div>
+                      <span className="emotion-total rose-total">
+                        {Math.round(student.neg.reduce((a, b) => a + b, 0) / 5)}
+                        % média
+                      </span>
+                    </div>
+                    {negative.map((x, i) => (
+                      <EmotionRow key={x} name={x} value={student.neg[i]} />
+                    ))}
+                  </div>
+                  <div className="panel family-guidance">
+                    <span className="guidance-icon">✧</span>
+                    <div>
+                      <h3>Como ler estes indicadores</h3>
+                      <p>
+                        As escalas são exemplos de autorrelato e não definem a
+                        personalidade nem medem saúde clínica. Use-as como
+                        convite para escutar, não como rótulo.
+                      </p>
+                    </div>
+                    <button
+                      className="primary-button"
+                      onClick={() => setTab("quiz")}
+                    >
+                      Fazer check-in <ChevronRight size={15} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              {subTab === "gatilhos" && (
+                <div className="trigger-grid">
+                  {student.triggers.map(
+                    ([title, type, description, metric], i) => (
+                      <article className="panel trigger-card" key={title}>
+                        <span
+                          className={
+                            i ? "trigger-tag caution" : "trigger-tag positive"
+                          }
+                        >
+                          {type}
+                        </span>
+                        <h3>{title}</h3>
+                        <p>{description}</p>
+                        <small>
+                          Possível tema para conversa: {metric}. Exemplo
+                          demonstrativo, não causa comprovada.
+                        </small>
+                      </article>
+                    ),
+                  )}
+                </div>
+              )}
+              {subTab === "acolhimento" && (
+                <div className="panel family-plan">
+                  <div className="plan-heading">
+                    <span>🧭</span>
+                    <div>
+                      <h3>Plano familiar de apoio · {student.name}</h3>
+                      <p>
+                        Sugestões para diálogo; adaptem à rotina e à vontade do
+                        estudante.
+                      </p>
+                    </div>
+                  </div>
+                  {student.plan.map((item, i) => (
+                    <div className="plan-step" key={item}>
+                      <b>{String(i + 1).padStart(2, "0")}</b>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                  <p className="gentle-note">
+                    Se surgir sofrimento persistente ou risco, procure um
+                    profissional qualificado ou serviço de saúde. Este app não
+                    substitui avaliação.
+                  </p>
+                </div>
+              )}
+            </section>
+          )}
+          {tab === "grades" && (
+            <section>
+              <Subnav
+                active={subTab}
+                onSelect={setSubTab}
+                items={[
+                  ["boletim", "📚 Boletim comparativo"],
+                  ["metas", "🎯 Plano de estudo"],
+                  ["competencias", "🧠 Competências"],
+                ]}
+              />
+              {subTab === "boletim" && (
+                <>
+                  <div className="grade-summary-grid">
+                    <div className="panel grade-summary">
+                      <small>MÉDIA ATUAL</small>
+                      <b>
+                        {average(student).toFixed(1)}
+                        <i>/10</i>
+                      </b>
+                      <span>calculada pelas 8 notas de exemplo</span>
+                    </div>
+                    <div className="panel grade-summary">
+                      <small>ASSIDUIDADE (SIMULADA)</small>
+                      <b>
+                        {student.attendance}
+                        <i>%</i>
+                      </b>
+                      <span>não é dado oficial da escola</span>
+                    </div>
+                    <div className="panel grade-summary">
+                      <small>MATÉRIA PARA REVISAR</small>
+                      <b>
+                        {
+                          student.grades.reduce((a, b) =>
+                            a[1] < b[1] ? a : b,
+                          )[0]
+                        }
+                      </b>
+                      <span>menor nota nesta amostra</span>
+                    </div>
+                  </div>
+                  <div className="panel full-panel">
+                    <div className="grade-panel-heading">
+                      <div>
+                        <h3>Notas por disciplina</h3>
+                        <p>
+                          Comparação ilustrativa com o período anterior · sem
+                          boletim oficial
+                        </p>
+                      </div>
+                      <div className="grade-filters">
+                        {[
+                          ["all", "Todas"],
+                          ["high", "Destaques"],
+                          ["attention", "Revisar"],
+                        ].map(([id, label]) => (
+                          <button
+                            className={
+                              gradeFilter === id
+                                ? "filter-btn active"
+                                : "filter-btn"
+                            }
+                            onClick={() => setGradeFilter(id)}
+                            key={id}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {[...student.grades]
+                      .sort((a, b) => b[1] - a[1])
+                      .filter(([, grade]) =>
+                        gradeFilter === "high"
+                          ? grade >= 8.5
+                          : gradeFilter === "attention"
+                            ? grade < 8.3
+                            : true,
+                      )
+                      .map(([subject, grade]) => {
+                        const previous =
+                          student.previousGrades[
+                            student.grades.findIndex((x) => x[0] === subject)
+                          ];
+                        const diff = grade - previous;
+                        return (
+                          <div className="subject" key={subject}>
+                            <span>{subject}</span>
+                            <div className="track">
+                              <div style={{ width: `${grade * 10}%` }} />
+                            </div>
+                            <b>{grade.toFixed(1)}</b>
+                            <small>
+                              anterior {previous.toFixed(1)} ·{" "}
+                              {diff >= 0 ? "+" : ""}
+                              {diff.toFixed(1)}
+                            </small>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </>
+              )}
+              {subTab === "metas" && (
+                <div className="panel family-plan">
+                  <div className="plan-heading">
+                    <span>🎯</span>
+                    <div>
+                      <h3>Meta de estudo — {student.name}</h3>
+                      <p>
+                        Objetivo proposto para organização pessoal, sem promessa
+                        de resultado.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="goal-callout">{student.goal}</div>
+                  <div className="study-routine">
+                    {[
+                      [
+                        "SEG / QUA",
+                        "Revisão de base",
+                        "25–30 min de exercícios, com pausa.",
+                      ],
+                      [
+                        "TER / QUI",
+                        "Prática aplicada",
+                        "Resolver questões e registrar dúvidas.",
+                      ],
+                      [
+                        "SEX / FIM DE SEMANA",
+                        "Revisão leve e descanso",
+                        "Planejar a próxima semana sem abrir mão do lazer.",
+                      ],
+                    ].map(([day, title, description]) => (
+                      <article className="routine-card" key={day}>
+                        <small>{day}</small>
+                        <b>{title}</b>
+                        <p>{description}</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {subTab === "competencias" && (
+                <div className="panel full-panel">
+                  <h3>Competências em desenvolvimento</h3>
+                  <p>
+                    Rubrica demonstrativa inspirada em competências escolares.
+                    Não é avaliação oficial da BNCC.
+                  </p>
+                  {student.skills.map(([name, value]) => (
+                    <div className="skill-row" key={name}>
+                      <div>
+                        <b>{name}</b>
+                        <span>
+                          {value >= 90
+                            ? "Destaque"
+                            : value >= 80
+                              ? "Em consolidação"
+                              : "Meta de prática"}
+                        </span>
+                      </div>
+                      <strong>{value}%</strong>
+                      <div className="track">
+                        <div style={{ width: `${value}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+          {tab === "quiz" && (
+            <section>
+              <Subnav
+                active={subTab}
+                onSelect={setSubTab}
+                items={[
+                  ["checkin", "🧩 Check-in de hoje"],
+                  ["historico", "🕒 Diário de check-ins"],
+                ]}
+              />
+              {subTab === "checkin" && (
+                <div className="quiz-pro">
+                  <div className="quiz-card">
+                    <div className="quiz-kicker">
+                      <Brain size={15} /> CHECK-IN SOCIOEMOCIONAL · 1 MINUTO
+                    </div>
+                    <h2>Como foi seu dia, {student.name}?</h2>
+                    <p>
+                      Responda às três perguntas. É um registro de percepção
+                      pessoal, não uma avaliação clínica.
+                    </p>
+                    <div className="quiz-question-list">
+                      {quizQuestions.map((q, index) => (
+                        <fieldset className="quiz-question" key={q.id}>
+                          <legend>
+                            <span>{String(index + 1).padStart(2, "0")}</span>
+                            {q.title}
+                          </legend>
+                          <div className="quiz-options">
+                            {q.options.map(([emoji, label], choice) => (
+                              <button
+                                type="button"
+                                key={label}
+                                className={
+                                  quizAnswers[q.id] === choice
+                                    ? "quiz-answer chosen"
+                                    : "quiz-answer"
+                                }
+                                aria-pressed={quizAnswers[q.id] === choice}
+                                onClick={() => {
+                                  setQuizAnswers((v) => ({
+                                    ...v,
+                                    [q.id]: choice,
+                                  }));
+                                  setQuizDone(false);
+                                }}
+                              >
+                                <span className="quiz-emoji">{emoji}</span>
+                                <small>{label}</small>
+                              </button>
+                            ))}
+                          </div>
+                        </fieldset>
+                      ))}
+                    </div>
+                    <label className="quiz-note-label">
+                      Observação rápida (opcional)
+                      <input
+                        value={quizNote}
+                        onChange={(e) => setQuizNote(e.target.value)}
+                        maxLength={180}
+                        placeholder="Uma conquista, dúvida ou algo que queira compartilhar…"
+                      />
+                    </label>
+                    {quizDone ? (
+                      <div className="quiz-feedback">
+                        <Check size={16} /> Check-in salvo. Indicadores
+                        atualizados e +25 pontos demonstrativos.
+                      </div>
+                    ) : (
+                      <button
+                        className="primary-button submit-quiz"
+                        disabled={
+                          Object.keys(quizAnswers).length !==
+                          quizQuestions.length
+                        }
+                        onClick={submitQuiz}
+                      >
+                        Registrar check-in <ChevronRight size={15} />
+                      </button>
+                    )}
+                    <div className="quiz-disclaimer">
+                      🔒 Respostas simuladas neste protótipo e mantidas apenas
+                      durante esta sessão. Elas não são diagnóstico nem
+                      substituem conversa com a família ou apoio profissional.
+                    </div>
+                  </div>
+                  <aside className="quiz-history panel">
+                    <span className="history-mark">✧</span>
+                    <h3>Registro recente</h3>
+                    {student.checkins.length ? (
+                      student.checkins.slice(0, 3).map((c, i) => (
+                        <div className="checkin-entry" key={i}>
+                          <b>{c.date}</b>
+                          <p>
+                            Humor: {c.mood} · Energia: {c.energy}
+                          </p>
+                          <small>Precisava de: {c.support}</small>
+                        </div>
+                      ))
+                    ) : (
+                      <p>
+                        Ainda não há check-ins registrados. Este espaço guarda
+                        os registros feitos nesta sessão.
+                      </p>
+                    )}
+                    <div className="quiet-note">
+                      Um dia difícil também faz parte. O importante é poder
+                      falar sobre isso com segurança.
+                    </div>
+                  </aside>
+                </div>
+              )}
+              {subTab === "historico" && (
+                <div className="panel full-panel">
+                  <h3>Diário emocional · {student.name}</h3>
+                  <p>
+                    Registros feitos nesta sessão neste protótipo; não são
+                    armazenados em servidor.
+                  </p>
+                  {student.checkins.length ? (
+                    student.checkins.map((c, i) => (
+                      <article className="checkin-entry" key={i}>
+                        <b>{c.date}</b>
+                        <p>
+                          Humor: {c.mood} · Energia: {c.energy} · Apoio:{" "}
+                          {c.support}
+                        </p>
+                        {c.note && <small>{c.note}</small>}
+                      </article>
+                    ))
+                  ) : (
+                    <div className="empty-state">
+                      Nenhum check-in registrado ainda. Os registros aparecerão
+                      aqui depois de responder às três perguntas.
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+          )}
+          {tab === "insights" && (
+            <section>
+              <Subnav
+                active={subTab}
+                onSelect={setSubTab}
+                items={[
+                  ["visao", "📈 Painel gráfico"],
+                  ["matriz", "🔬 Hábitos & contexto"],
+                ]}
+              />
+              {subTab === "visao" && (
+                <>
+                  <section
+                    className="rings-grid"
+                    aria-label="Indicadores circulares"
+                  >
+                    {[
+                      {
+                        label: "Bem-estar",
+                        value: well(student),
+                        color: "#35dfc0",
+                      },
+                      { label: "Foco", value: student.focus, color: "#63c8ff" },
+                      {
+                        label: "Desempenho",
+                        value: Math.round(average(student) * 10),
+                        color: "#aa82ff",
+                      },
+                      {
+                        label: "Frequência",
+                        value: student.attendance,
+                        color: "#ffbd59",
+                      },
+                    ].map(({ label, value, color }) => (
+                      <article className="ring-card" key={label}>
+                        <div
+                          className="ring-visual"
+                          role="progressbar"
+                          aria-label={`${label}, dado demonstrativo`}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={value}
+                          style={{
+                            "--ring-color": color,
+                            "--ring-progress": `${Math.max(0, Math.min(100, value)) * 3.6}deg`,
+                          }}
+                        >
+                          <span>{value}%</span>
+                        </div>
+                        <div className="ring-copy">
+                          <b>{label}</b>
+                          <small>Indicador demonstrativo</small>
+                        </div>
+                      </article>
+                    ))}
+                  </section>
+                  <div className="charts-pro-grid">
+                    <div className="panel chart-pro-card">
+                      <div className="chart-heading">
+                        <div>
+                          <h3>Indicador semanal</h3>
+                          <p>Série ilustrativa atualizada após check-in</p>
+                        </div>
+                        <span>8 SEM.</span>
+                      </div>
+                      <div className="chart-bars">
+                        {student.history.map((v, i) => (
+                          <div
+                            className="bar-group"
+                            key={i}
+                            title={`Semana ${i + 1}: ${v}`}
+                          >
+                            <b>{v}</b>
+                            <div className="bar" style={{ height: `${v}%` }} />
+                            <small>S{i + 1}</small>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="panel chart-pro-card">
+                      <div className="chart-heading">
+                        <div>
+                          <h3>Notas por disciplina</h3>
+                          <p>Média atual: {average(student).toFixed(1)} / 10</p>
+                        </div>
+                        <span>SIMULADO</span>
+                      </div>
+                      <div className="grade-chart">
+                        {student.grades.map(([name, value]) => (
+                          <div key={name} title={`${name}: ${value}`}>
+                            <span>{name.slice(0, 4)}</span>
+                            <i>
+                              <em style={{ width: `${value * 10}%` }} />
+                            </i>
+                            <b>{value.toFixed(1)}</b>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="panel chart-pro-card">
+                      <div className="chart-heading">
+                        <div>
+                          <h3>Radar emocional</h3>
+                          <p>5 forças · autorrelato ilustrativo</p>
+                        </div>
+                        <span>{well(student)}%</span>
+                      </div>
+                      <div className="radar-list">
+                        {positive.map((name, i) => (
+                          <div key={name}>
+                            <span>{name}</span>
+                            <i>
+                              <em style={{ width: `${student.pos[i]}%` }} />
+                            </i>
+                            <b>{student.pos[i]}</b>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="panel chart-footnote">
+                      <Sparkles size={18} />
+                      <p>
+                        Os gráficos descrevem apenas a amostra simulada desta
+                        demonstração. Não permitem concluir relações de causa e
+                        efeito entre bem-estar e notas.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+              {subTab === "matriz" && (
+                <div className="context-grid">
+                  <div className="panel context-intro">
+                    <span>🔬</span>
+                    <div>
+                      <h3>Hábitos e contexto escolar</h3>
+                      <p>
+                        Uma organização para apoiar conversas, não um
+                        diagnóstico nem uma correlação validada. Sono e foco
+                        abaixo são valores fictícios de demonstração.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="panel context-card">
+                    <small>ROTINA · SIMULADA</small>
+                    <b>
+                      {student.sleep} <i>de sono ilustrativo</i>
+                    </b>
+                    <p>
+                      Converse com {student.name} sobre descanso e rotina; não
+                      trate este número como medição real.
+                    </p>
+                  </div>
+                  <div className="panel context-card">
+                    <small>ASSIDUIDADE · SIMULADA</small>
+                    <b>{student.attendance}%</b>
+                    <p>
+                      Exemplo de frequência para demonstrar o painel. Confirme
+                      dados oficiais diretamente com a escola.
+                    </p>
+                  </div>
+                  <div className="panel context-card">
+                    <small>OBJETIVO ACADÊMICO · SUGESTÃO</small>
+                    <b>
+                      {
+                        student.grades.reduce((a, b) =>
+                          a[1] < b[1] ? a : b,
+                        )[0]
+                      }
+                    </b>
+                    <p>{student.goal}</p>
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
+          {tab === "chat" && (
+            <section>
+              <Subnav
+                active={subTab}
+                onSelect={setSubTab}
+                items={[
+                  ["mensagens", "💬 Mensagens"],
+                  ["pareceres", `📋 Pareceres (${student.reports.length})`],
+                ]}
+              />
+              {subTab === "mensagens" && (
+                <div className="chat-panel panel">
+                  <div className="chat-head">
+                    <div className="teacher-avatar">👩🏻‍🏫</div>
+                    <div>
+                      <b>{student.teacher}</b>
+                      <small>
+                        Protótipo demonstrativo · mensagens não são enviadas à
+                        escola
+                      </small>
+                    </div>
+                    <span className="online">● Canal demonstrativo</span>
+                  </div>
+                  <div className="chat-messages">
+                    {(student.messages || []).map((m, i) => (
+                      <div
+                        className={`message ${m.from === "you" ? "mine" : ""}`}
+                        key={i}
+                      >
+                        {m.text}
+                        <small>{m.time || "Registro demonstrativo"}</small>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="chat-compose">
+                    <input
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && send()}
+                      placeholder="Escreva uma mensagem para a professora..."
+                    />
+                    <button onClick={send}>
+                      <Send size={17} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              {subTab === "pareceres" && (
+                <div className="reports-grid">
+                  {student.reports.map(([author, date, badge, text]) => (
+                    <article className="panel report-card" key={author}>
+                      <div className="report-meta">
+                        <b>{author}</b>
+                        <span>{date}</span>
+                      </div>
+                      <small>{badge} · relato demonstrativo</small>
+                      <p>{text}</p>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+        </div>
+      </main>
+      {compareOpen && (
+        <div
+          className="compare-overlay"
+          onMouseDown={(e) =>
+            e.target === e.currentTarget && setCompareOpen(false)
+          }
+        >
+          <section
+            className="compare-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="compare-title"
+          >
+            <div className="compare-head">
+              <h2 id="compare-title">Comparativo familiar</h2>
+              <button
+                className="compare-close"
+                onClick={() => setCompareOpen(false)}
+              >
+                Fechar ×
+              </button>
+            </div>
+            <p className="compare-legend">
+              Amostras fictícias para comparação visual · não representam
+              avaliação escolar oficial.
+            </p>
+            <div className="compare-row">
+              <span>Estudante</span>
+              <b>Média</b>
+              <b>Bem-estar</b>
+              <b>Engaj.</b>
+            </div>
+            {students.map((s) => (
+              <div className="compare-row" key={s.id}>
+                <span>
+                  {s.emoji} {s.name}
+                </span>
+                <b>{average(s).toFixed(1)}</b>
+                <b>{well(s)}%</b>
+                <b>{engagement(s)}%</b>
+              </div>
+            ))}
+          </section>
+        </div>
+      )}
+      <nav className="mobile-tabs">
+        {tabs.map(([id, label, Icon]) => (
+          <button
+            key={id}
+            className={tab === id ? "on" : ""}
+            onClick={() => setTab(id)}
+          >
+            <Icon size={19} />
+            <small>{label === "Quiz emocional" ? "Quiz" : label}</small>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
 }
-function Metric({icon,name,value,suffix,color,hint}){return <div className="metric-card"><div className="metric-top"><span className={`metric-icon ${color}`}>{icon}</span><button className="dots">···</button></div><small>{name}</small><div className="metric-value">{value}<em>{suffix}</em></div><div className="metric-hint">{hint}</div></div>}
-function EmotionRow({name,value,positive}){return <div className="emotion-row"><span>{name}</span><div className="track"><div style={{width:`${value}%`,background:positive?'#63b99a':'#ee929e'}}/></div><b>{value}%</b></div>}
 
-function Subnav({active,onSelect,items}){return <nav className="pro-subnav" role="tablist">{items.map(([id,label])=><button type="button" key={id} role="tab" aria-selected={active===id} className={active===id?'active':''} onClick={()=>onSelect(id)}>{label}</button>)}</nav>}
-
-
-createRoot(document.getElementById('root')).render(<App/>);
+createRoot(document.getElementById("root")).render(<App />);
