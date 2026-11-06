@@ -168,26 +168,6 @@ function App() {
             </b>
             <small>ÁREA DA FAMÍLIA</small>
           </div>
-          <div className="theme-switcher" role="group" aria-label="Tema visual">
-            {[
-              ["dark", Moon, "Escuro"],
-              ["light", Sun, "Claro"],
-              ["rose", Flower2, "Rosé"],
-            ].map(([id, Icon, label]) => (
-              <button
-                key={id}
-                className={
-                  theme === id ? "theme-choice active" : "theme-choice"
-                }
-                onClick={() => setTheme(id)}
-                aria-pressed={theme === id}
-                title={`Tema ${label}`}
-              >
-                <Icon size={14} />
-                <span>{label}</span>
-              </button>
-            ))}
-          </div>
         </div>
         <div className="family">
           <div className="family-avatar">A</div>
@@ -228,6 +208,26 @@ function App() {
           <div className="crumb">
             Área da família <ChevronRight size={15} />
             <b>{tabs.find((x) => x[0] === tab)?.[1]}</b>
+          </div>
+          <div className="theme-switcher" role="group" aria-label="Tema visual">
+            {[
+              ["dark", Moon, "Escuro"],
+              ["light", Sun, "Claro"],
+              ["rose", Flower2, "Rosé"],
+            ].map(([id, Icon, label]) => (
+              <button
+                key={id}
+                className={
+                  theme === id ? "theme-choice active" : "theme-choice"
+                }
+                onClick={() => setTheme(id)}
+                aria-pressed={theme === id}
+                title={`Tema ${label}`}
+              >
+                <Icon size={14} />
+                <span>{label}</span>
+              </button>
+            ))}
           </div>
           <div className="top-actions">
             <button className="icon-button" aria-label="Notificações">
