@@ -1,0 +1,204 @@
+/* Cross-screen overflow prevention and soft semantic glows for every app section. */
+.content,
+.content > *,
+.content section,
+.content article,
+.content
+  :is(
+    .stats-grid,
+    .family-kpis,
+    .dashboard-grid,
+    .charts-pro-grid,
+    .context-grid,
+    .detail-grid,
+    .quiz-wrap,
+    .student-list,
+    .student-switcher,
+    .panel,
+    .metric-card,
+    .full-panel,
+    .quiz-card,
+    .chat-panel,
+    .ring-card
+  ) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.content :is(h1, h2, h3, h4, p, small, b, strong, label, legend) {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.content
+  :is(
+    .student-chip,
+    .student-chip > span,
+    .student-chip > div,
+    .panel-title,
+    .panel-title > div,
+    .chart-heading,
+    .chart-heading > div,
+    .ring-copy
+  ) {
+  min-width: 0;
+}
+
+.content :is(.tabs-bar, .pro-subnav, .subtabs-wrap) {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.content
+  :is(
+    .panel,
+    .metric-card,
+    .student-switcher,
+    .full-panel,
+    .quiz-card,
+    .chat-panel,
+    .family-kpis > div,
+    .student-chip,
+    .ring-card
+  ) {
+  box-shadow:
+    0 12px 28px rgba(5, 10, 24, 0.18),
+    0 0 18px color-mix(in srgb, var(--accent, #60c5ff) 10%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.content
+  :is(
+    .metric-card,
+    .panel,
+    .student-chip,
+    .quiz-card,
+    .full-panel,
+    .student-switcher,
+    .family-kpis > div,
+    .ring-card
+  ):hover {
+  border-color: color-mix(
+    in srgb,
+    var(--accent, #60c5ff) 42%,
+    var(--line, transparent)
+  );
+  box-shadow:
+    0 17px 34px rgba(2, 6, 18, 0.25),
+    0 0 22px color-mix(in srgb, var(--accent, #60c5ff) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.content :is(.track, .grade-chart i, .radar-list i, .progress-track) {
+  min-width: 0;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.content :is(.track div, .grade-chart em, .radar-list em, .progress-fill) {
+  filter: drop-shadow(
+    0 0 5px color-mix(in srgb, var(--accent, #60c5ff) 28%, transparent)
+  );
+}
+
+.student-chip.chosen,
+.nav-item.active,
+.tab-pill.active,
+.subtab-btn.active,
+.quiz-mini-card.selected,
+.theme-choice.active {
+  box-shadow:
+    0 6px 18px rgba(2, 6, 18, 0.18),
+    0 0 16px color-mix(in srgb, var(--accent, #60c5ff) 24%, transparent);
+}
+
+@media (max-width: 1400px) {
+  .rings-grid {
+    gap: 12px;
+  }
+  .ring-card {
+    flex-direction: column;
+    justify-content: center;
+    gap: 9px;
+    min-height: 178px;
+    padding: 13px 8px;
+    text-align: center;
+  }
+  .ring-visual {
+    width: clamp(78px, 7vw, 96px);
+  }
+  .ring-copy {
+    justify-items: center;
+    width: 100%;
+  }
+  .ring-copy b {
+    font-size: 15px;
+  }
+  .ring-copy small {
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .content
+    :is(
+      .stats-grid,
+      .family-kpis,
+      .dashboard-grid,
+      .charts-pro-grid,
+      .context-grid,
+      .detail-grid,
+      .quiz-wrap
+    ) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .content {
+    width: 100%;
+    padding-inline: 14px;
+  }
+  .content :is(.stats-grid, .family-kpis) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .content
+    :is(
+      .dashboard-grid,
+      .charts-pro-grid,
+      .context-grid,
+      .detail-grid,
+      .quiz-wrap
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ring-card {
+    min-height: 164px;
+  }
+  .content
+    :is(.panel, .metric-card, .student-switcher, .full-panel, .quiz-card) {
+    padding: 15px;
+  }
+  .content :is(.section-heading, .welcome-row) {
+    flex-wrap: wrap;
+  }
+  .content :is(.student-chip b, .student-chip small) {
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+}
