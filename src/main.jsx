@@ -6,10 +6,11 @@ import './themes.css';
 import './polish.css';
 import './quiz.css';
 import './theme-contrast.css';
+import './responsive-finish.css';
 
 const initial=[
  {id:1,name:'Isabela',full:'Isabela Albuquerque',age:14,grade:'9º ano do Ensino Fundamental',emoji:'👩🏽‍🎨',color:'lilac',teacher:'Prof.ª Amanda Farias',grades:[['Português',8.6],['Matemática',7.2],['História',8.4],['Geografia',8.1],['Ciências',9.0],['Artes',9.7],['Inglês',8.2],['Ed. Física',9.4]],pos:[76,82,72,88,78],neg:[24,32,28,19,36],attendance:96,focus:78,history:[64,67,70,72,75,78,80,82],checkins:[],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]},
- {id:2,name:'Gabriel',full:'Gabriel Albuquerque',age:16,grade:'2º ano do Ensino Médio',emoji:'🧑🏻‍🚀',color:'mint',teacher:'Prof. Carlos Eduardo',grades:[['Português',7.8],['Matemática',8.9],['História',8.1],['Geografia',8.6],['Ciências',8.4],['Artes',7.9],['Inglês',9.2],['Ed. Física',8.7]],pos:[72,78,84,75,80],neg:[30,24,20,26,31],attendance:98,focus:84,history:[66,69,71,74,76,79,82,84],checkins:[],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]},
+ {id:2,name:'Gabriel',full:'Gabriel Albuquerque',age:16,grade:'2º ano do Ensino Médio',emoji:'🧑🏻‍🎓',color:'mint',teacher:'Prof. Carlos Eduardo',grades:[['Português',7.8],['Matemática',8.9],['História',8.1],['Geografia',8.6],['Ciências',8.4],['Artes',7.9],['Inglês',9.2],['Ed. Física',8.7]],pos:[72,78,84,75,80],neg:[30,24,20,26,31],attendance:98,focus:84,history:[66,69,71,74,76,79,82,84],checkins:[],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]},
  {id:3,name:'Manuela',full:'Manuela Albuquerque',age:17,grade:'3º ano do Ensino Médio',emoji:'👩🏾‍🎤',color:'peach',teacher:'Prof.ª Renata Dias',grades:[['Português',9.1],['Matemática',8.2],['História',9.4],['Geografia',9.0],['Ciências',8.8],['Artes',9.3],['Inglês',8.7],['Ed. Física',9.5]],pos:[85,79,88,81,86],neg:[18,27,21,23,29],attendance:97,focus:89,history:[71,74,76,78,81,84,86,89],checkins:[],messages:[{from:'teacher',text:'Olá, família! Este é um canal demonstrativo para conversar com a professora.'}]}
 ];
 const positive=['Criatividade','Coragem','Autoestima','Motivação','Felicidade'], negative=['Raiva','Medo','Solidão','Tristeza','Ansiedade'];
