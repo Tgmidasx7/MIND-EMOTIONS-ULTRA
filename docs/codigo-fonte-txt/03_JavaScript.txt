@@ -1,0 +1,494 @@
+﻿JAVASCRIPT — FUNÇÃO
+Este volume contém os dados demonstrativos e a lógica sem interface: catálogo de emoções, perfis, métricas, check-in e interpretação de URLs. Não há código Java/JVM neste projeto.
+
+==============================================================================
+ARQUIVO: src/data/emotions.js
+==============================================================================
+export const positiveEmotions = [
+  "Criatividade",
+  "Coragem",
+  "Autoestima",
+  "Motivação",
+  "Felicidade",
+];
+export const negativeEmotions = [
+  "Raiva",
+  "Medo",
+  "Solidão",
+  "Tristeza",
+  "Ansiedade",
+];
+
+==============================================================================
+ARQUIVO: src/data/students.js
+==============================================================================
+export const initialStudents = [
+  {
+    id: 1,
+    name: "Isabela",
+    full: "Isabela Albuquerque",
+    age: 14,
+    grade: "9º ano do Ensino Fundamental",
+    emoji: "👩🏽‍🎨",
+    color: "lilac",
+    teacher: "Prof.ª Amanda Farias",
+    grades: [
+      ["Português", 8.6],
+      ["Matemática", 7.2],
+      ["História", 8.4],
+      ["Geografia", 8.1],
+      ["Ciências", 9.0],
+      ["Artes", 9.7],
+      ["Inglês", 8.2],
+      ["Ed. Física", 9.4],
+    ],
+    pos: [76, 82, 72, 88, 78],
+    neg: [24, 32, 28, 19, 36],
+    attendance: 96,
+    focus: 78,
+    history: [64, 67, 70, 72, 75, 78, 80, 82],
+    checkins: [
+      {
+        date: "04 nov · exemplo",
+        mood: "Tranquila",
+        energy: "Boa",
+        support: "Conversar",
+        note: "Registro ilustrativo de check-in.",
+      },
+    ],
+    messages: [
+      {
+        from: "teacher",
+        text: "Olá, família! Este é um canal demonstrativo para conversar com a professora.",
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Gabriel",
+    full: "Gabriel Albuquerque",
+    age: 16,
+    grade: "2º ano do Ensino Médio",
+    emoji: "🧑🏻‍🎓",
+    color: "mint",
+    teacher: "Prof. Carlos Eduardo",
+    grades: [
+      ["Português", 7.8],
+      ["Matemática", 8.9],
+      ["História", 8.1],
+      ["Geografia", 8.6],
+      ["Ciências", 8.4],
+      ["Artes", 7.9],
+      ["Inglês", 9.2],
+      ["Ed. Física", 8.7],
+    ],
+    pos: [72, 78, 84, 75, 80],
+    neg: [30, 24, 20, 26, 31],
+    attendance: 98,
+    focus: 84,
+    history: [66, 69, 71, 74, 76, 79, 82, 84],
+    checkins: [
+      {
+        date: "04 nov · exemplo",
+        mood: "Neutro",
+        energy: "Estável",
+        support: "Ajuda",
+        note: "Registro ilustrativo de check-in.",
+      },
+    ],
+    messages: [
+      {
+        from: "teacher",
+        text: "Olá, família! Este é um canal demonstrativo para conversar com a professora.",
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Manuela",
+    full: "Manuela Albuquerque",
+    age: 17,
+    grade: "3º ano do Ensino Médio",
+    emoji: "👩🏾‍🎤",
+    color: "peach",
+    teacher: "Prof.ª Renata Dias",
+    grades: [
+      ["Português", 9.1],
+      ["Matemática", 8.2],
+      ["História", 9.4],
+      ["Geografia", 9.0],
+      ["Ciências", 8.8],
+      ["Artes", 9.3],
+      ["Inglês", 8.7],
+      ["Ed. Física", 9.5],
+    ],
+    pos: [85, 79, 88, 81, 86],
+    neg: [18, 27, 21, 23, 29],
+    attendance: 97,
+    focus: 89,
+    history: [71, 74, 76, 78, 81, 84, 86, 89],
+    checkins: [
+      {
+        date: "05 nov · exemplo",
+        mood: "Bem",
+        energy: "Boa",
+        support: "Descanso",
+        note: "Registro ilustrativo de check-in.",
+      },
+    ],
+    messages: [
+      {
+        from: "teacher",
+        text: "Olá, família! Este é um canal demonstrativo para conversar com a professora.",
+      },
+    ],
+  },
+];
+const profileDetails = {
+  1: {
+    previousGrades: [8.3, 6.8, 8.1, 7.9, 8.7, 9.5, 8.0, 9.2],
+    sleep: "7h 50m",
+    goal: "Consolidar equações e funções em Matemática, avançando gradualmente de 7,2 para 8,0.",
+    streak: 12,
+    rewards: 940,
+    triggers: [
+      [
+        "Mostra Cultural e Laboratório",
+        "Fator de impulso",
+        "Liderou a identidade visual da feira de Ciências e participou com entusiasmo.",
+        "Criatividade",
+      ],
+      [
+        "Avaliações cronometradas",
+        "Contexto para acolher",
+        "Relatou insegurança diante de listas longas de Matemática com tempo limitado.",
+        "Ansiedade",
+      ],
+    ],
+    plan: [
+      "Dividir a revisão de Matemática em blocos curtos, com pausas.",
+      "Reconhecer o esforço em Artes e Ciências sem comparar irmãos.",
+      "Reservar um momento de conversa sem pauta escolar.",
+    ],
+    skills: [
+      ["Expressão artística e criativa", 95],
+      ["Investigação científica", 90],
+      ["Comunicação e leitura crítica", 86],
+      ["Raciocínio algébrico", 72],
+    ],
+    reports: [
+      [
+        "Prof.ª Amanda Farias",
+        "12 nov",
+        "Destaque criativo",
+        "Isabela contribui com ideias visuais e colabora bem em projetos em grupo.",
+      ],
+      [
+        "Prof. Ricardo Menezes",
+        "10 nov",
+        "Em evolução",
+        "Compreende melhor os conceitos quando pode explicar o raciocínio em voz alta.",
+      ],
+    ],
+  },
+  2: {
+    previousGrades: [7.5, 8.6, 8.0, 8.4, 8.2, 7.8, 9.0, 8.6],
+    sleep: "7h 15m",
+    goal: "Ampliar repertório e coesão na redação, com meta de estudo progressiva em Português.",
+    streak: 18,
+    rewards: 1280,
+    triggers: [
+      [
+        "Projeto de Robótica",
+        "Fator de impulso",
+        "Participa com iniciativa nas tarefas práticas e costuma apoiar a equipe.",
+        "Coragem",
+      ],
+      [
+        "Revisão de redação",
+        "Contexto para acolher",
+        "Pode se frustrar ao revisar textos longos; dividir a revisão em etapas pode ajudar.",
+        "Frustração",
+      ],
+    ],
+    plan: [
+      "Relacionar temas de tecnologia a exercícios de escrita e argumentação.",
+      "Reconhecer constância, colaboração e assiduidade.",
+      "Combinar pausas sem telas antes do horário de dormir.",
+    ],
+    skills: [
+      ["Leitura técnica e repertório", 92],
+      ["Modelagem matemática", 89],
+      ["Colaboração em projetos", 84],
+      ["Argumentação escrita", 78],
+    ],
+    reports: [
+      [
+        "Prof. Carlos Eduardo",
+        "11 nov",
+        "Participação",
+        "Gabriel demonstra raciocínio consistente e colaboração em atividades práticas.",
+      ],
+      [
+        "Prof.ª Helena Prado",
+        "08 nov",
+        "Próximo passo",
+        "A próxima meta é estruturar melhor os parágrafos de desenvolvimento da redação.",
+      ],
+    ],
+  },
+  3: {
+    previousGrades: [8.9, 7.9, 9.2, 8.8, 8.6, 9.1, 8.5, 9.4],
+    sleep: "7h 30m",
+    goal: "Praticar análise combinatória e probabilidade em sessões curtas, mantendo equilíbrio na rotina.",
+    streak: 23,
+    rewards: 1560,
+    triggers: [
+      [
+        "Simulado e redação",
+        "Fator de impulso",
+        "A rotina planejada parece ajudar Manuela a acompanhar as metas de estudo.",
+        "Motivação",
+      ],
+      [
+        "Escolhas para o futuro",
+        "Contexto para acolher",
+        "Conversas sobre vestibular podem trazer dúvidas; acolher perguntas sem exigir decisões imediatas.",
+        "Ansiedade",
+      ],
+    ],
+    plan: [
+      "Celebrar consistência sem fazer de cada conversa uma cobrança por notas.",
+      "Manter lazer e atividade física na agenda semanal.",
+      "Revisar probabilidade com exercícios graduais e pausas planejadas.",
+    ],
+    skills: [
+      ["Repertório e produção textual", 96],
+      ["Análise histórica", 93],
+      ["Autogestão da rotina", 91],
+      ["Matemática aplicada", 82],
+    ],
+    reports: [
+      [
+        "Prof.ª Renata Dias",
+        "12 nov",
+        "Produção textual",
+        "Manuela apresenta repertório consistente e boa organização das ideias.",
+      ],
+      [
+        "Prof. Marcos Vinícius",
+        "09 nov",
+        "Meta de estudo",
+        "A revisão atual está concentrada em análise combinatória e probabilidade.",
+      ],
+    ],
+  },
+};
+export const seedStudents = initialStudents.map((s) => ({
+  ...s,
+  ...profileDetails[s.id],
+}));
+
+==============================================================================
+ARQUIVO: src/domain/checkin.js
+==============================================================================
+export const quizQuestions = [
+  {
+    id: "mood",
+    title: "Como você se sentiu na maior parte do dia?",
+    options: [
+      ["😊", "Bem"],
+      ["🙂", "Ok"],
+      ["😐", "Neutro"],
+      ["😟", "Difícil"],
+    ],
+  },
+  {
+    id: "energy",
+    title: "Como esteve sua energia hoje?",
+    options: [
+      ["⚡", "Alta"],
+      ["🌤️", "Boa"],
+      ["🔋", "Baixa"],
+      ["🌙", "Pouca"],
+    ],
+  },
+  {
+    id: "support",
+    title: "O que seria mais útil agora?",
+    options: [
+      ["💬", "Conversar"],
+      ["📚", "Ajuda"],
+      ["🌿", "Descanso"],
+      ["🤝", "Apoio"],
+    ],
+  },
+];
+
+const clamp = (value, min = 0, max = 100) =>
+  Math.max(min, Math.min(max, Math.round(value)));
+
+/** Apply a completed self-report check-in without mutating the original student. */
+export function applyCheckin(
+  student,
+  answers,
+  { note = "", timestamp = new Date() } = {},
+) {
+  const ids = quizQuestions.map((question) => question.id);
+  if (
+    !student ||
+    ids.some(
+      (id) =>
+        !Number.isInteger(answers?.[id]) || answers[id] < 0 || answers[id] > 3,
+    )
+  ) {
+    throw new Error(
+      "Complete as três perguntas antes de registrar o check-in.",
+    );
+  }
+  const next = {
+    ...student,
+    pos: student.pos.map((value) => clamp(value, 10, 98)),
+    neg: student.neg.map((value) => clamp(value, 8, 90)),
+    history: [...student.history],
+    checkins: [...student.checkins],
+  };
+  const mood = answers.mood,
+    energy = answers.energy;
+  const moodDelta = [4, 2, 0, -3][mood];
+  next.pos[4] = clamp(next.pos[4] + moodDelta, 10, 98);
+  next.pos[2] = clamp(next.pos[2] + (mood < 2 ? 1 : -1), 10, 98);
+  next.neg[4] = clamp(
+    next.neg[4] + (mood === 3 ? 3 : mood === 2 ? 1 : -2),
+    8,
+    90,
+  );
+  next.pos[3] = clamp(next.pos[3] + [3, 2, -2, -3][energy], 10, 98);
+  next.focus = clamp(next.focus + [2, 1, -2, -3][energy], 20, 98);
+  next.history.push(
+    clamp(
+      next.history.at(-1) +
+        Math.round((moodDelta + [3, 2, -2, -3][energy]) / 2),
+      20,
+      98,
+    ),
+  );
+  if (next.history.length > 8) next.history.shift();
+  next.rewards += 25;
+  next.checkins.unshift({
+    date:
+      timestamp instanceof Date
+        ? timestamp.toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : String(timestamp),
+    mood: quizQuestions[0].options[mood][1],
+    energy: quizQuestions[1].options[energy][1],
+    support: quizQuestions[2].options[answers.support][1],
+    note: note.trim() || "Sem observação adicional.",
+  });
+  return next;
+}
+
+==============================================================================
+ARQUIVO: src/domain/metrics.js
+==============================================================================
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+/** Arithmetic mean of the student's current illustrative subject grades. */
+export function average(student) {
+  const grades = student?.grades ?? [];
+  if (grades.length === 0) return 0;
+  return grades.reduce((sum, [, grade]) => sum + grade, 0) / grades.length;
+}
+
+/** Positive share of the configured emotional indicators (demo index, not diagnosis). */
+export function wellbeing(student) {
+  const positive = student?.pos ?? [];
+  const negative = student?.neg ?? [];
+  const positiveTotal = positive.reduce((sum, value) => sum + value, 0);
+  const total = positiveTotal + negative.reduce((sum, value) => sum + value, 0);
+  return total > 0 ? Math.round((positiveTotal / total) * 100) : 0;
+}
+
+/** Demo focus indicator; derive from motivation and creativity only if absent. */
+export function focusScore(student) {
+  if (Number.isFinite(student?.focus))
+    return clamp(Math.round(student.focus), 0, 100);
+  const values = student?.pos ?? [];
+  return values.length > 3 ? Math.round((values[0] + values[3]) / 2) : 0;
+}
+
+/** Shared weighted engagement score used by cards, comparison and profile. */
+export function engagement(student) {
+  const academic = average(student) * 10;
+  const attendance = Number.isFinite(student?.attendance)
+    ? student.attendance
+    : 0;
+  return Math.round(
+    academic * 0.4 +
+      wellbeing(student) * 0.25 +
+      attendance * 0.2 +
+      focusScore(student) * 0.15,
+  );
+}
+
+export function familySummary(students) {
+  if (!students?.length) return { engagement: 0, wellbeing: 0, attendance: 0 };
+  const mean = (values) =>
+    Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+  return {
+    engagement: mean(students.map(engagement)),
+    wellbeing: mean(students.map(wellbeing)),
+    attendance: mean(students.map((student) => student.attendance ?? 0)),
+  };
+}
+
+==============================================================================
+ARQUIVO: src/domain/routes.js
+==============================================================================
+const tabPaths = {
+  home: "visao-geral",
+  emotions: "filhos/emocoes",
+  grades: "notas",
+  quiz: "quiz-emocional",
+  insights: "graficos",
+  chat: "mensagens",
+};
+const pathTabs = Object.fromEntries(
+  Object.entries(tabPaths).map(([tab, path]) => [path, tab]),
+);
+const studentSlugs = { 1: "isabela", 2: "gabriel", 3: "manuela" };
+const slugStudents = Object.fromEntries(
+  Object.entries(studentSlugs).map(([id, slug]) => [slug, Number(id)]),
+);
+
+function cleanBase(base) {
+  const segments = String(base || "/")
+    .split("/")
+    .filter(Boolean);
+  return segments.length ? `/${segments.join("/")}/` : "/";
+}
+
+export function appUrl(tab, studentId = 1, base = "/") {
+  const route = tabPaths[tab] || tabPaths.home;
+  const prefix = cleanBase(base);
+  const url = `${prefix}${route}`;
+  const slug = studentSlugs[studentId];
+  return slug && studentId !== 1 ? `${url}?filho=${slug}` : url;
+}
+
+export function parseAppUrl(pathname, search = "", base = "/") {
+  const prefix = cleanBase(base);
+  let relative = String(pathname || "/");
+  if (relative.startsWith(prefix)) relative = relative.slice(prefix.length);
+  else relative = relative.replace(/^\/+/, "");
+  relative = relative.replace(/\/+$/, "");
+  const tab = pathTabs[relative] || "home";
+  const params = new URLSearchParams(search);
+  const studentId = slugStudents[params.get("filho")?.toLowerCase()] || 1;
+  return { tab, studentId };
+}

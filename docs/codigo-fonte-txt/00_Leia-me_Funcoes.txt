@@ -1,0 +1,66 @@
+﻿MIND EMOTIONS — ÁREA DA FAMÍLIA
+PACOTE DE CÓDIGO-FONTE EM TXT (UTF-8, compatível com Bloco de Notas)
+Versão do projeto: commit fe483b9
+Snapshot dos arquivos: 07/11/2026
+
+IMPORTANTE SOBRE A LINGUAGEM
+Este projeto não possui código Java (linguagem Java/JVM). A interface é feita em React com JavaScript/JSX. O arquivo JavaScript.txt contém os módulos JavaScript de dados e regras.
+
+COMO USAR
+Abra os arquivos .txt no Bloco de Notas ou editor de texto. Cada arquivo de código tem uma explicação breve, depois o caminho original e o conteúdo integral daquele arquivo. As linhas foram convertidas para o padrão Windows (CRLF); o conteúdo-fonte não foi reformulado.
+
+MAPA DOS ARQUIVOS
+• 01_HTML.txt — documento HTML inicial que monta a aplicação.
+• 02_React-JSX.txt — aplicação e componentes React.
+• 03_JavaScript.txt — dados demonstrativos e regras de negócio/rotas.
+• 04_CSS.txt — todos os estilos e temas.
+• 05_Testes.txt — testes automatizados.
+• 06_Config-e-Documentacao.txt — configuração, dependências, CI/CD e guias.
+• Este arquivo — índice e explicação individual dos arquivos.
+
+As explicações documentam a função pretendida de cada arquivo, não significam que o protótipo seja um serviço real. Perfis, notas, emoções e mensagens são demonstrativos. Não insira dados verdadeiros de crianças/adolescentes.
+
+FUNÇÃO DE CADA ARQUIVO-FONTE
+
+HTML
+• index.html — documento base carregado pelo navegador; define idioma, metadados, o elemento #root e inicia src/main.jsx.
+
+REACT / JSX
+• src/main.jsx — componente principal da aplicação: seleciona estudante e aba, mostra os módulos, atualiza temas, check-in e simulações, e sincroniza as abas com o histórico/URLs do navegador. É o arquivo que coordena a interface.
+• src/components/ui.jsx — componentes reutilizáveis de cartões de métrica, linhas de emoções e subnavegação.
+
+JAVASCRIPT: DADOS E REGRAS
+• src/data/emotions.js — rótulos/listas de emoções positivos e de atenção usados na demonstração.
+• src/data/students.js — perfis fictícios, notas, indicadores, histórico, relatórios e demais conteúdos de exemplo.
+• src/domain/checkin.js — três perguntas do check-in, valida respostas e produz uma atualização imutável dos indicadores demonstrativos.
+• src/domain/metrics.js — calcula médias, bem-estar, foco, engajamento e resumo da família; os índices não são diagnóstico ou avaliação oficial.
+• src/domain/routes.js — transforma abas em caminhos amigáveis e lê o perfil selecionado do parâmetro filho na URL.
+
+CSS
+• src/styles/index.css — arquivo de entrada que importa os estilos na ordem aplicada.
+• src/styles/style.css — regras de estrutura geral e responsividade-base.
+• src/styles/themes.css — variáveis e estilos dos temas escuro, claro e rosé.
+• src/styles/polish.css — refinamentos visuais compactos e organização da interface.
+• src/styles/quiz.css — regras visuais do quiz/check-in.
+• src/styles/theme-contrast.css — ajustes de contraste para temas claro e rosé.
+• src/styles/responsive-finish.css — ajustes finais para tamanhos de tela e acabamento dos controles.
+• src/styles/app-pro.css — componentes e seções avançadas do dashboard.
+• src/styles/rings.css — indicadores circulares e respectivos cartões.
+• src/styles/layout-polish.css — overflow, alinhamento e refinamentos de layout/responsividade.
+• src/styles/surface-finish.css — fundos, superfícies, cartões e acabamento visual.
+• src/styles/version-union.css — seletor compacto de temas, simulações de rotina e detalhes azuis claros.
+
+TESTES
+• tests/domain.test.js — valida dados de exemplo, métricas, check-in de três perguntas, imutabilidade e limites.
+• tests/routes.test.js — verifica caminhos das abas e restauração do perfil por URL.
+
+CONFIGURAÇÃO E DOCUMENTAÇÃO
+• package.json — nome, dependências e comandos npm do projeto.
+• package-lock.json — árvore exata de dependências resolvidas pelo npm ci.
+• vite.config.js — configuração do servidor/build Vite e base do GitHub Pages.
+• .github/workflows/pages.yml — pipeline GitHub Actions que testa build e publica no GitHub Pages.
+• .gitignore — arquivos locais/build que não devem entrar no Git.
+• README.md — intenção, escopo demonstrativo, execução local e limites de uso.
+• CONTRIBUTING.md — orientações de contribuição, testes e proteção de privacidade.
+
+NOTA: o PDF de auditoria é um relatório e os PDFs anteriores são cópias legíveis do código; nenhum deles é executado pela aplicação.
