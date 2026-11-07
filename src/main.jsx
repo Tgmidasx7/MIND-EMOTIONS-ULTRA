@@ -58,7 +58,8 @@ function App() {
     [quizNote, setQuizNote] = useState(""),
     [sortMode, setSortMode] = useState("default"),
     [rsvp, setRsvp] = useState(false),
-    [compareOpen, setCompareOpen] = useState(false);
+    [compareOpen, setCompareOpen] = useState(false),
+    [themeOpen, setThemeOpen] = useState(false);
   React.useEffect(() => {
     document.body.dataset.theme = theme;
     localStorage.setItem("mind-theme", theme);
@@ -100,6 +101,47 @@ function App() {
   };
   const update = (s) =>
     setStudents((prev) => prev.map((x) => (x.id === s.id ? s : x)));
+  const simulateStudentScenario = (scenario) => {
+    const next = {
+      ...student,
+      pos: [...student.pos],
+      neg: [...student.neg],
+      grades: student.grades.map(([subject, grade]) => [subject, grade]),
+      history: [...student.history],
+    };
+    const raise = (values, index, amount) => {
+      values[index] = Math.min(100, Math.max(0, values[index] + amount));
+    };
+    if (scenario === "project") {
+      next.focus = Math.min(100, next.focus + 4);
+      raise(next.pos, 0, 5);
+      raise(next.pos, 3, 4);
+      raise(next.pos, 4, 4);
+      raise(next.neg, 4, -4);
+      const lowest = next.grades.reduce(
+        (min, grade, index, all) => (grade[1] < all[min][1] ? index : min),
+        0,
+      );
+      next.grades[lowest][1] = Math.min(
+        10,
+        +(next.grades[lowest][1] + 0.3).toFixed(1),
+      );
+    } else if (scenario === "exam") {
+      next.attendance = Math.min(100, next.attendance + 1);
+      next.focus = Math.min(100, next.focus + 3);
+      raise(next.pos, 1, 3);
+      raise(next.neg, 4, 5);
+    } else {
+      next.focus = Math.min(100, next.focus + 2);
+      raise(next.pos, 2, 4);
+      raise(next.pos, 4, 5);
+      raise(next.neg, 0, -4);
+      raise(next.neg, 3, -4);
+      raise(next.neg, 4, -6);
+    }
+    next.history = [...next.history.slice(1), engagement(next)];
+    update(next);
+  };
   const submitQuiz = () => {
     if (Object.keys(quizAnswers).length !== quizQuestions.length) return;
     try {
@@ -209,25 +251,59 @@ function App() {
             Área da família <ChevronRight size={15} />
             <b>{tabs.find((x) => x[0] === tab)?.[1]}</b>
           </div>
-          <div className="theme-switcher" role="group" aria-label="Tema visual">
-            {[
-              ["dark", Moon, "Escuro"],
-              ["light", Sun, "Claro"],
-              ["rose", Flower2, "Rosé"],
-            ].map(([id, Icon, label]) => (
-              <button
-                key={id}
-                className={
-                  theme === id ? "theme-choice active" : "theme-choice"
-                }
-                onClick={() => setTheme(id)}
-                aria-pressed={theme === id}
-                title={`Tema ${label}`}
+          <div
+            className="theme-corner-wrapper"
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                setThemeOpen(false);
+            }}
+          >
+            <button
+              className="theme-circle-trigger"
+              type="button"
+              aria-label={`Tema atual: ${{ dark: "Escuro Profundo", light: "Claro Cristal", rose: "Rosé Pastel" }[theme] || "Escuro Profundo"}`}
+              aria-haspopup="menu"
+              aria-expanded={themeOpen}
+              onClick={() => setThemeOpen((open) => !open)}
+            >
+              {theme === "dark" ? (
+                <Moon size={17} />
+              ) : theme === "light" ? (
+                <Sun size={17} />
+              ) : (
+                <Flower2 size={17} />
+              )}
+            </button>
+            {themeOpen && (
+              <div
+                className="theme-sidebar-popover"
+                role="menu"
+                aria-label="Escolha um tema"
               >
-                <Icon size={14} />
-                <span>{label}</span>
-              </button>
-            ))}
+                <b className="theme-popover-title">Aparência</b>
+                {[
+                  ["dark", Moon, "Escuro Profundo"],
+                  ["light", Sun, "Claro Cristal"],
+                  ["rose", Flower2, "Rosé Pastel"],
+                ].map(([id, Icon, label]) => (
+                  <button
+                    key={id}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={theme === id}
+                    className={`theme-option ${theme === id ? "active" : ""}`}
+                    onClick={() => {
+                      setTheme(id);
+                      setThemeOpen(false);
+                    }}
+                  >
+                    <Icon size={16} />
+                    <span>{label}</span>
+                    {theme === id && <Check size={15} />}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="top-actions">
             <button className="icon-button" aria-label="Notificações">
@@ -390,6 +466,36 @@ function App() {
                     </i>
                   </div>
                 ))}
+              </div>
+              <div
+                className="routine-simulations"
+                aria-label="Simulações demonstrativas"
+              >
+                <span>Simular rotina</span>
+                <button
+                  type="button"
+                  onClick={() => simulateStudentScenario("project")}
+                  title="Simular avanço em projeto criativo"
+                >
+                  🎨 Projeto
+                </button>
+                <button
+                  type="button"
+                  onClick={() => simulateStudentScenario("exam")}
+                  title="Simular semana de avaliações"
+                >
+                  📝 Avaliações
+                </button>
+                <button
+                  type="button"
+                  onClick={() => simulateStudentScenario("rest")}
+                  title="Simular rotina com mais descanso"
+                >
+                  🌿 Descanso
+                </button>
+                <small>
+                  Atualiza apenas estes dados demonstrativos nesta sessão.
+                </small>
               </div>
             </section>
           )}
