@@ -1,0 +1,127 @@
+/* Roomier page frame, softer card silhouettes, and deeper light/rose canvases. */
+body[data-theme="light"] {
+  --base: #e7edf5;
+  --raised: #dce5f0;
+  --card: rgba(249, 251, 254, 0.97);
+  --card2: #edf2f8;
+  --line: rgba(28, 55, 90, 0.18);
+  background-color: var(--base);
+  background-image:
+    radial-gradient(
+      ellipse at 8% 8%,
+      rgba(69, 137, 204, 0.12),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 92% 16%,
+      rgba(128, 105, 180, 0.1),
+      transparent 36%
+    ),
+    linear-gradient(145deg, #e8eef6, #e3eaf3 58%, #e9edf4);
+}
+
+body[data-theme="rose"] {
+  --base: #f0dfe7;
+  --raised: #e7d1dc;
+  --card: rgba(251, 243, 247, 0.97);
+  --card2: #f3e5ec;
+  --line: rgba(133, 58, 91, 0.2);
+  background-color: var(--base);
+  background-image:
+    radial-gradient(
+      ellipse at 9% 7%,
+      rgba(184, 92, 132, 0.13),
+      transparent 39%
+    ),
+    radial-gradient(
+      ellipse at 91% 18%,
+      rgba(127, 86, 151, 0.11),
+      transparent 37%
+    ),
+    linear-gradient(145deg, #f2e3e9, #eadbe4 58%, #f0e2e8);
+}
+
+.content {
+  width: 100%;
+  max-width: 1100px;
+  padding: clamp(24px, 3vw, 36px) clamp(22px, 3vw, 40px) 64px;
+}
+
+.content
+  :is(
+    .student-switcher,
+    .metric-card,
+    .panel,
+    .full-panel,
+    .quiz-card,
+    .chat-panel,
+    .family-kpis > div,
+    .ring-card,
+    .student-profile-summary,
+    .emotion-pro-card,
+    .family-guidance,
+    .quiz-history
+  ) {
+  border-radius: 20px;
+}
+
+.content .student-switcher {
+  border-radius: 22px;
+}
+
+.content :is(.student-chip, .quiz-question, .quiz-answer, .mood-option) {
+  border-radius: 15px;
+}
+
+.content :is(.tabs-bar, .pro-subnav, .subtabs-wrap) {
+  border-radius: 17px;
+}
+
+.content
+  :is(
+    .student-switcher,
+    .metric-card,
+    .panel,
+    .full-panel,
+    .quiz-card,
+    .ring-card
+  ) {
+  margin-inline: 0;
+}
+
+@media (min-width: 1400px) {
+  .content {
+    max-width: 1100px;
+    padding-inline: 42px;
+  }
+}
+
+@media (max-width: 900px) {
+  .content {
+    max-width: 100%;
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 650px) {
+  .content {
+    padding: 22px 17px 48px;
+  }
+  .content
+    :is(
+      .student-switcher,
+      .metric-card,
+      .panel,
+      .full-panel,
+      .quiz-card,
+      .ring-card
+    ) {
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 370px) {
+  .content {
+    padding-inline: 13px;
+  }
+}
