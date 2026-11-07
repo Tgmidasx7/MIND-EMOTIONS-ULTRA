@@ -1,0 +1,193 @@
+/* A stronger, consistently scaled type hierarchy across every screen. */
+body[data-theme] {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+body[data-theme] .content :is(h1, .welcome-row h1) {
+  font-size: clamp(28px, 2.4vw, 34px);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+body[data-theme]
+  .content
+  :is(.section-heading h2, .profile-person h2, .quiz-card h2) {
+  font-size: clamp(21px, 1.8vw, 25px);
+  line-height: 1.24;
+}
+
+body[data-theme]
+  .content
+  :is(
+    .panel h3,
+    .panel-title h3,
+    .chart-heading h3,
+    .quiz-question legend,
+    .family-guidance h3
+  ) {
+  font-size: clamp(17px, 1.35vw, 20px);
+  line-height: 1.3;
+}
+
+body[data-theme]
+  .content
+  :is(
+    p,
+    .welcome-row p,
+    .section-heading p,
+    .panel-title p,
+    .chart-heading p,
+    .quiz-card > p,
+    .family-guidance p
+  ) {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+body[data-theme]
+  .content
+  :is(
+    small,
+    .eyebrow,
+    .crumb,
+    .metric-card > small,
+    .metric-hint,
+    .student-chip small,
+    .family-kpis small,
+    .ring-copy small,
+    .event small,
+    .switch-title span,
+    .text-link,
+    .chart-legend,
+    .quiz-disclaimer,
+    .checkin-entry p,
+    .user small
+  ) {
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+body[data-theme] .content .metric-hint {
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+body[data-theme]
+  :is(
+    button,
+    input,
+    textarea,
+    select,
+    .nav-item,
+    .theme-choice,
+    .tab-pill,
+    .subtab-btn
+  ) {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+body[data-theme]
+  .content
+  :is(.metric-value, .grade-overview strong, .profile-score b) {
+  font-size: clamp(25px, 2vw, 31px);
+  line-height: 1.1;
+}
+
+body[data-theme] .content :is(.metric-card, .family-kpis > div) {
+  min-height: 142px;
+  padding: 17px;
+}
+
+body[data-theme] .content :is(.student-chip b, .family b, .user b) {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+  body[data-theme]
+    .content
+    :is(.section-heading h2, .profile-person h2, .quiz-card h2) {
+    font-size: clamp(20px, 3vw, 23px);
+  }
+  body[data-theme]
+    .content
+    :is(
+      p,
+      .welcome-row p,
+      .section-heading p,
+      .panel-title p,
+      .chart-heading p
+    ) {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 650px) {
+  body[data-theme] {
+    font-size: 15px;
+  }
+  body[data-theme] .content :is(h1, .welcome-row h1) {
+    font-size: clamp(25px, 7vw, 30px);
+  }
+  body[data-theme]
+    .content
+    :is(.section-heading h2, .profile-person h2, .quiz-card h2) {
+    font-size: 21px;
+  }
+  body[data-theme] .content :is(.panel h3, .panel-title h3, .chart-heading h3) {
+    font-size: 18px;
+  }
+  body[data-theme]
+    .content
+    :is(
+      p,
+      .welcome-row p,
+      .section-heading p,
+      .panel-title p,
+      .chart-heading p,
+      .quiz-card > p
+    ) {
+    font-size: 14px;
+  }
+  body[data-theme]
+    .content
+    :is(
+      small,
+      .eyebrow,
+      .crumb,
+      .metric-card > small,
+      .metric-hint,
+      .student-chip small,
+      .family-kpis small,
+      .ring-copy small,
+      .event small,
+      .switch-title span,
+      .text-link,
+      .chart-legend,
+      .user small
+    ) {
+    font-size: 12px;
+  }
+  body[data-theme] .content .metric-hint {
+    font-size: 13px;
+  }
+  body[data-theme]
+    :is(
+      button,
+      input,
+      textarea,
+      select,
+      .nav-item,
+      .theme-choice,
+      .tab-pill,
+      .subtab-btn
+    ) {
+    font-size: 13px;
+  }
+  body[data-theme] .content :is(.metric-card, .family-kpis > div) {
+    min-height: 136px;
+    padding: 14px;
+  }
+}
