@@ -32,6 +32,7 @@ import {
   familySummary,
 } from "./domain/metrics.js";
 import { quizQuestions, applyCheckin } from "./domain/checkin.js";
+import { appUrl, parseAppUrl } from "./domain/routes.js";
 import { Metric, EmotionRow, Subnav } from "./components/ui.jsx";
 import "./styles/index.css";
 
@@ -44,9 +45,16 @@ const tabs = [
   ["chat", "Mensagens", MessageCircle],
 ];
 function App() {
+  const [initialRoute] = useState(() =>
+    parseAppUrl(
+      window.location.pathname,
+      window.location.search,
+      import.meta.env.BASE_URL,
+    ),
+  );
   const [students, setStudents] = useState(seedStudents),
-    [selected, setSelected] = useState(1),
-    [tab, setTab] = useState("home"),
+    [selected, setSelected] = useState(initialRoute.studentId),
+    [tab, setTab] = useState(initialRoute.tab),
     [quizAnswers, setQuizAnswers] = useState({}),
     [quizDone, setQuizDone] = useState(false),
     [message, setMessage] = useState(""),
@@ -60,6 +68,19 @@ function App() {
     [rsvp, setRsvp] = useState(false),
     [compareOpen, setCompareOpen] = useState(false),
     [themeOpen, setThemeOpen] = useState(false);
+  React.useEffect(() => {
+    const syncRoute = () => {
+      const route = parseAppUrl(
+        window.location.pathname,
+        window.location.search,
+        import.meta.env.BASE_URL,
+      );
+      setTab(route.tab);
+      setSelected(route.studentId);
+    };
+    window.addEventListener("popstate", syncRoute);
+    return () => window.removeEventListener("popstate", syncRoute);
+  }, []);
   React.useEffect(() => {
     document.body.dataset.theme = theme;
     localStorage.setItem("mind-theme", theme);
@@ -92,9 +113,15 @@ function App() {
     day: "2-digit",
     month: "long",
   }).format(new Date());
+  const navigateTab = (nextTab, studentId = selected) => {
+    setTab(nextTab);
+    const url = appUrl(nextTab, studentId, import.meta.env.BASE_URL);
+    if (`${window.location.pathname}${window.location.search}` !== url)
+      window.history.pushState({}, "", url);
+  };
   const changeStudent = (id) => {
     setSelected(id);
-    setTab("home");
+    navigateTab("home", id);
     setQuizDone(false);
     setQuizAnswers({});
     setQuizNote("");
@@ -225,7 +252,7 @@ function App() {
             <button
               key={id}
               className={tab === id ? "nav-item active" : "nav-item"}
-              onClick={() => setTab(id)}
+              onClick={() => navigateTab(id)}
             >
               <Icon size={18} />
               <span>{label}</span>
@@ -593,7 +620,7 @@ function App() {
                   </div>
                   <button
                     className="inline-link"
-                    onClick={() => setTab("emotions")}
+                    onClick={() => navigateTab("emotions")}
                   >
                     Ver perfil emocional <ChevronRight size={15} />
                   </button>
@@ -636,7 +663,7 @@ function App() {
                   </div>
                   <button
                     className="inline-link"
-                    onClick={() => setTab("grades")}
+                    onClick={() => navigateTab("grades")}
                   >
                     Acessar boletim completo <ChevronRight size={15} />
                   </button>
@@ -656,7 +683,7 @@ function App() {
                     </p>
                     <button
                       className="inline-link"
-                      onClick={() => setTab("insights")}
+                      onClick={() => navigateTab("insights")}
                     >
                       Explorar insights <ChevronRight size={15} />
                     </button>
@@ -769,7 +796,7 @@ function App() {
                     </div>
                     <button
                       className="primary-button"
-                      onClick={() => setTab("quiz")}
+                      onClick={() => navigateTab("quiz")}
                     >
                       Fazer check-in <ChevronRight size={15} />
                     </button>
@@ -1431,7 +1458,7 @@ function App() {
           <button
             key={id}
             className={tab === id ? "on" : ""}
-            onClick={() => setTab(id)}
+            onClick={() => navigateTab(id)}
           >
             <Icon size={19} />
             <small>{label === "Quiz emocional" ? "Quiz" : label}</small>
