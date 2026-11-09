@@ -1,6 +1,6 @@
 ﻿MIND EMOTIONS — ÁREA DA FAMÍLIA
 PACOTE DE CÓDIGO-FONTE EM TXT (UTF-8, compatível com Bloco de Notas)
-Versão do projeto: commit a856a75
+Versão do projeto: commit 9aa62ca
 Snapshot dos arquivos: 07/11/2026
 
 IMPORTANTE SOBRE A LINGUAGEM
