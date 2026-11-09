@@ -15,6 +15,7 @@ ARQUIVO: src/styles/index.css
 @import "./layout-polish.css";
 @import "./surface-finish.css";
 @import "./version-union.css";
+@import "./theme-readability.css";
 
 ==============================================================================
 ARQUIVO: src/styles/style.css
@@ -899,5 +900,211 @@ body[data-theme="rose"] .routine-simulations button {
   }
   .routine-simulations small {
     font-size: 7px;
+  }
+}
+
+==============================================================================
+ARQUIVO: src/styles/theme-readability.css
+==============================================================================
+/* Higher contrast and a deliberate background-to-card hierarchy for light themes. */
+body[data-theme="light"] {
+  --base: #c8d3df;
+  --raised: #d7e0e9;
+  --card: #fcfdff;
+  --card2: #eef3f8;
+  --line: rgba(29, 43, 59, 0.22);
+  --ink: #111820;
+  --copy: #202a34;
+  --muted: #3d4a58;
+  --accent: #124c83;
+  --selected: rgba(26, 92, 151, 0.12);
+  background-color: var(--base) !important;
+  background-image:
+    radial-gradient(
+      ellipse at 9% 6%,
+      rgba(61, 124, 183, 0.11),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 92% 14%,
+      rgba(105, 99, 143, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #cbd6e2, #c3cfdb 58%, #d1d9e3) !important;
+  color: var(--ink);
+}
+
+body[data-theme="rose"] {
+  --base: #d7c5ce;
+  --raised: #e2d3da;
+  --card: #fcf9fa;
+  --card2: #f1e8ed;
+  --line: rgba(62, 39, 50, 0.22);
+  --ink: #191419;
+  --copy: #2b2228;
+  --muted: #493940;
+  --accent: #74243f;
+  --selected: rgba(131, 39, 72, 0.11);
+  background-color: var(--base) !important;
+  background-image:
+    radial-gradient(
+      ellipse at 9% 7%,
+      rgba(147, 83, 111, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 91% 17%,
+      rgba(111, 84, 126, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #dac9d1, #d1c0c9 58%, #dfd0d6) !important;
+  color: var(--ink);
+}
+
+/* Keep the browser chrome darker than information cards, but still light. */
+body[data-theme="light"] {
+  --header-glass: rgba(211, 221, 232, 0.96);
+  --header-edge: rgba(45, 66, 89, 0.24);
+  --header-active: rgba(28, 91, 148, 0.13);
+  --chrome-ink: #151b22;
+  --page-glow-a: rgba(46, 119, 184, 0.16);
+  --page-glow-b: rgba(105, 94, 145, 0.11);
+}
+body[data-theme="rose"] {
+  --header-glass: rgba(222, 207, 215, 0.97);
+  --header-edge: rgba(86, 53, 68, 0.24);
+  --header-active: rgba(126, 39, 73, 0.12);
+  --chrome-ink: #21171c;
+  --page-glow-a: rgba(151, 76, 108, 0.15);
+  --page-glow-b: rgba(112, 77, 128, 0.1);
+}
+
+body[data-theme="light"] .content,
+body[data-theme="rose"] .content {
+  color: var(--ink);
+}
+body[data-theme="light"] .content :is(h1, h2, h3, h4, b, strong, legend),
+body[data-theme="rose"] .content :is(h1, h2, h3, h4, b, strong, legend) {
+  color: var(--ink);
+}
+body[data-theme="light"] .content :is(p, small, .eyebrow, .crumb),
+body[data-theme="rose"] .content :is(p, small, .eyebrow, .crumb) {
+  color: var(--muted);
+}
+body[data-theme="light"]
+  .content
+  :is(.student-chip, .date-pill, .soft-button, .icon-button, .routine-card),
+body[data-theme="rose"]
+  .content
+  :is(.student-chip, .date-pill, .soft-button, .icon-button, .routine-card) {
+  color: var(--copy);
+}
+body[data-theme="light"] .content .student-switcher,
+body[data-theme="light"] .content .panel,
+body[data-theme="light"] .content .metric-card,
+body[data-theme="light"] .content .full-panel,
+body[data-theme="light"] .content .ring-card,
+body[data-theme="light"] .content .chat-panel,
+body[data-theme="light"] .content .quiz-card,
+body[data-theme="light"] .content .family-guidance,
+body[data-theme="rose"] .content .student-switcher,
+body[data-theme="rose"] .content .panel,
+body[data-theme="rose"] .content .metric-card,
+body[data-theme="rose"] .content .full-panel,
+body[data-theme="rose"] .content .ring-card,
+body[data-theme="rose"] .content .chat-panel,
+body[data-theme="rose"] .content .quiz-card,
+body[data-theme="rose"] .content .family-guidance {
+  border-color: var(--line);
+  box-shadow: 0 12px 28px rgba(23, 33, 47, 0.14);
+}
+body[data-theme="light"] .content .student-switcher,
+body[data-theme="light"] .content .panel,
+body[data-theme="light"] .content .metric-card,
+body[data-theme="light"] .content .full-panel,
+body[data-theme="light"] .content .ring-card,
+body[data-theme="light"] .content .chat-panel,
+body[data-theme="light"] .content .quiz-card {
+  background-color: var(--card);
+}
+body[data-theme="rose"] .content .student-switcher,
+body[data-theme="rose"] .content .panel,
+body[data-theme="rose"] .content .metric-card,
+body[data-theme="rose"] .content .full-panel,
+body[data-theme="rose"] .content .ring-card,
+body[data-theme="rose"] .content .chat-panel,
+body[data-theme="rose"] .content .quiz-card {
+  background-color: var(--card);
+}
+body[data-theme="light"] .content .student-chip,
+body[data-theme="light"] .content .mood-summary,
+body[data-theme="light"] .content .routine-card,
+body[data-theme="light"] .content .quiz-question,
+body[data-theme="light"] .content .quiz-answer,
+body[data-theme="light"] .content .date-pill,
+body[data-theme="light"] .content .soft-button,
+body[data-theme="light"] .content .icon-button,
+body[data-theme="rose"] .content .student-chip,
+body[data-theme="rose"] .content .mood-summary,
+body[data-theme="rose"] .content .routine-card,
+body[data-theme="rose"] .content .quiz-question,
+body[data-theme="rose"] .content .quiz-answer,
+body[data-theme="rose"] .content .date-pill,
+body[data-theme="rose"] .content .soft-button,
+body[data-theme="rose"] .content .icon-button {
+  background-color: var(--card2);
+  border-color: var(--line);
+}
+body[data-theme="light"] .content .student-chip.chosen,
+body[data-theme="rose"] .content .student-chip.chosen {
+  background-color: var(--selected);
+  border-color: var(--accent);
+}
+body[data-theme="rose"] .content .student-profile-summary,
+body[data-theme="rose"] .content .emotion-pro-card,
+body[data-theme="rose"] .content .family-guidance,
+body[data-theme="rose"] .content .quiz-history {
+  border-color: rgba(116, 36, 63, 0.25);
+}
+body[data-theme="light"] .content .insight-panel,
+body[data-theme="rose"] .content .insight-panel {
+  color: var(--copy);
+  border-color: var(--line);
+}
+body[data-theme="light"] .content .insight-panel {
+  background: linear-gradient(110deg, #eaf1f8, #fbfdff 72%);
+}
+body[data-theme="rose"] .content .insight-panel {
+  background: linear-gradient(110deg, #f0e5ea, #fcf9fa 72%);
+}
+body[data-theme="light"] .content .message:not(.mine),
+body[data-theme="light"] .content .chat-compose input,
+body[data-theme="rose"] .content .message:not(.mine),
+body[data-theme="rose"] .content .chat-compose input {
+  color: var(--ink);
+}
+body[data-theme="light"] .content .message:not(.mine),
+body[data-theme="light"] .content .chat-compose input {
+  background-color: var(--card2);
+}
+body[data-theme="rose"] .content .message:not(.mine),
+body[data-theme="rose"] .content .chat-compose input {
+  background-color: var(--card2);
+}
+body[data-theme="light"] .content .routine-simulations button,
+body[data-theme="rose"] .content .routine-simulations button {
+  color: var(--copy);
+  border-color: var(--line);
+}
+body[data-theme="rose"] .content .routine-simulations button {
+  background-color: #f1e4e9;
+}
+body[data-theme="light"] .content .routine-simulations button {
+  background-color: #e8eff6;
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="light"],
+  body[data-theme="rose"] {
+    transition: none;
   }
 }
