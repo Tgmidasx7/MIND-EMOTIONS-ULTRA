@@ -191,6 +191,31 @@ body[data-theme="rose"] .content .routine-simulations button {
 body[data-theme="rose"] .content .routine-simulations button {
   background-color: #f1e4e9;
 }
+
+/* Grade rows used a dark navy surface in the original compact theme CSS. */
+body[data-theme="light"] .content .subject,
+body[data-theme="rose"] .content .subject {
+  background-color: var(--card2) !important;
+  background-image: none !important;
+  border-color: var(--line);
+  color: var(--copy);
+}
+body[data-theme="light"] .content .subject > span,
+body[data-theme="light"] .content .subject > b,
+body[data-theme="rose"] .content .subject > span,
+body[data-theme="rose"] .content .subject > b {
+  color: var(--ink);
+}
+body[data-theme="light"] .content .subject > small,
+body[data-theme="rose"] .content .subject > small {
+  color: var(--muted) !important;
+}
+body[data-theme="light"] .content .subject .track {
+  background-color: #d7e0e9 !important;
+}
+body[data-theme="rose"] .content .subject .track {
+  background-color: #e1d3da !important;
+}
 body[data-theme="light"] .content .routine-simulations button {
   background-color: #e8eff6;
 }
