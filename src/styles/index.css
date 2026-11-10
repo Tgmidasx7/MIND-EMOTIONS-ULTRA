@@ -11,4 +11,5 @@
 @import "./version-union.css";
 @import "./theme-readability.css";
 @import "./type-contrast.css";
-\n@import "./admin.css";\n
+
+@import "./admin.css";
