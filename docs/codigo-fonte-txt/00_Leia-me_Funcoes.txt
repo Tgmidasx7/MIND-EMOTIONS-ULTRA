@@ -1,6 +1,6 @@
 ﻿MIND EMOTIONS — ÁREA DA FAMÍLIA
 PACOTE DE CÓDIGO-FONTE EM TXT (UTF-8, compatível com Bloco de Notas)
-Versão do projeto: commit 9aa62ca
+Versão do projeto: commit 7a27275
 Snapshot dos arquivos: 07/11/2026
 
 IMPORTANTE SOBRE A LINGUAGEM
@@ -50,10 +50,12 @@ CSS
 • src/styles/surface-finish.css — fundos, superfícies, cartões e acabamento visual.
 • src/styles/version-union.css — seletor compacto de temas, simulações de rotina e detalhes azuis claros.
 • src/styles/theme-readability.css — paletas claro/rosé mais escuras no fundo, superfícies de informação mais claras e tipografia de maior contraste.
+• src/styles/type-contrast.css — aumento moderado da tipografia, contraste adicional por tema e foco visível no teclado, sem zoom.
 
 TESTES
 • tests/domain.test.js — valida dados de exemplo, métricas, check-in de três perguntas, imutabilidade e limites.
 • tests/routes.test.js — verifica caminhos das abas e restauração do perfil por URL.
+• tests/theme-styles.test.js — protege contra regressão das cores das linhas de nota e da escala tipográfica/foco.
 
 CONFIGURAÇÃO E DOCUMENTAÇÃO
 • package.json — nome, dependências e comandos npm do projeto.
