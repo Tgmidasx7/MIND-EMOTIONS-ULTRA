@@ -5,6 +5,7 @@ const tabPaths = {
   quiz: "quiz-emocional",
   insights: "graficos",
   chat: "mensagens",
+  admin: "gestao-administrativa",
 };
 const pathTabs = Object.fromEntries(
   Object.entries(tabPaths).map(([tab, path]) => [path, tab]),
