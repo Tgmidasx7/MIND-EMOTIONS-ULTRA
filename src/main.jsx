@@ -458,7 +458,7 @@ function App() {
               ))}
             </div>
           </section>
-          {tab !== "home" && (
+          {tab !== "home" && tab !== "admin" && (
             <section className="student-profile-summary">
               <div className={`profile-face ${student.color}`}>
                 {student.emoji}
