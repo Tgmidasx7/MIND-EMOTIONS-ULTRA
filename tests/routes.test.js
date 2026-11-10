@@ -28,3 +28,18 @@ test("routes restore the active tab and selected child from a shared URL", () =>
     { tab: "grades", studentId: 1 },
   );
 });
+
+test("administrative workspace has a shareable route", () => {
+  assert.equal(
+    appUrl("admin", 1, "/MIND-EMOTIONS-ULTRA/"),
+    "/MIND-EMOTIONS-ULTRA/gestao-administrativa",
+  );
+  assert.deepEqual(
+    parseAppUrl(
+      "/MIND-EMOTIONS-ULTRA/gestao-administrativa",
+      "",
+      "/MIND-EMOTIONS-ULTRA/",
+    ),
+    { tab: "admin", studentId: 1 },
+  );
+});
