@@ -1,0 +1,64 @@
+/* Theme-coherent navigation chrome: header, desktop sidebar and mobile footer. */
+body[data-theme] {
+  --chrome-surface: color-mix(in srgb, var(--card) 94%, transparent);
+  --chrome-border: var(--line);
+  --chrome-shadow: 0 -8px 28px rgba(20, 25, 40, 0.08);
+}
+body[data-theme] .topbar,
+body[data-theme] .sidebar,
+body[data-theme] .mobile-tabs {
+  background: var(--chrome-surface) !important;
+  color: var(--ink);
+  border-color: var(--chrome-border) !important;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+body[data-theme] .mobile-tabs {
+  box-shadow: var(--chrome-shadow);
+  border-top: 1px solid var(--chrome-border);
+}
+body[data-theme] .mobile-tabs button {
+  background: transparent;
+  color: var(--muted);
+  transition: color 180ms ease, background-color 180ms ease;
+}
+body[data-theme] .mobile-tabs button.on {
+  color: var(--accent);
+  background: var(--selected);
+}
+body[data-theme] .sidebar .nav-item {
+  color: var(--muted);
+}
+body[data-theme] .sidebar .nav-item.active {
+  color: var(--accent);
+  background: var(--selected);
+}
+body[data-theme] .sidebar .nav-item.active::before {
+  background: var(--accent);
+}
+body[data-theme] .topbar .crumb,
+body[data-theme] .topbar .crumb b {
+  color: var(--ink);
+}
+body[data-theme] .topbar .icon-button,
+body[data-theme] .topbar .theme-circle-trigger,
+body[data-theme] .topbar .theme-sidebar-popover,
+body[data-theme] .topbar .theme-option {
+  background: var(--card2);
+  color: var(--copy);
+  border-color: var(--line);
+}
+body[data-theme] .topbar .theme-option.active {
+  background: var(--selected);
+  color: var(--accent);
+}
+@media (max-width: 650px) {
+  body[data-theme] .mobile-tabs {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme] .mobile-tabs button {
+    transition: none;
+  }
+}
