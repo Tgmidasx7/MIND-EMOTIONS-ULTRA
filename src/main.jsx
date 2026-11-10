@@ -18,6 +18,7 @@ import {
   Sun,
   Moon,
   Flower2,
+  Building2,
 } from "lucide-react";
 import { seedStudents } from "./data/students.js";
 import {
@@ -34,6 +35,7 @@ import {
 import { quizQuestions, applyCheckin } from "./domain/checkin.js";
 import { appUrl, parseAppUrl } from "./domain/routes.js";
 import { Metric, EmotionRow, Subnav } from "./components/ui.jsx";
+import Admin from "./components/Admin.jsx";
 import "./styles/index.css";
 
 const tabs = [
@@ -43,6 +45,7 @@ const tabs = [
   ["quiz", "Quiz emocional", Brain],
   ["insights", "Gráficos", BarChart3],
   ["chat", "Mensagens", MessageCircle],
+  ["admin", "Gestão Administrativa", Building2],
 ];
 function App() {
   const [initialRoute] = useState(() =>
@@ -1343,6 +1346,7 @@ function App() {
               )}
             </section>
           )}
+          {tab === "admin" && <Admin />}
           {tab === "chat" && (
             <section>
               <Subnav
