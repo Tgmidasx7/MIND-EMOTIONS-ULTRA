@@ -1,0 +1,69 @@
+name: Publish MapMind without replacing the main app
+
+on:
+  push:
+    branches: [mvp-v2]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current published version
+        uses: actions/checkout@v4
+        with:
+          ref: arena/ae0ea85a-mind-emotions-ultra
+          path: official
+
+      - name: Checkout new MapMind version
+        uses: actions/checkout@v4
+        with:
+          ref: mvp-v2
+          path: mapmind-src
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install and build current published version
+        run: |
+          npm ci --prefix official
+          npm run build --prefix official
+          cp official/dist/index.html official/dist/404.html
+
+      - name: Install and build MapMind in its own path
+        run: |
+          npm ci --prefix mapmind-src
+          npm run build --prefix mapmind-src -- --base=/MIND-EMOTIONS-ULTRA/mapmind/
+          mkdir -p official/dist/mapmind
+          cp -R mapmind-src/dist/. official/dist/mapmind/
+          cp official/dist/mapmind/index.html official/dist/mapmind/404.html
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload combined Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: official/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy combined site
+        id: deployment
+        uses: actions/deploy-pages@v4
