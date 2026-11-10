@@ -1,0 +1,186 @@
+/* Moderate type-size and contrast lift; no page scaling or zoom. */
+body[data-theme="dark"] {
+  --copy: #d8def1;
+  --muted: #aeb9d6;
+  --line: rgba(136, 164, 226, 0.31);
+}
+
+body[data-theme] .content .welcome-row h1 {
+  font-size: clamp(24px, 2vw, 28px);
+  line-height: 1.18;
+}
+body[data-theme] .content .welcome-row p,
+body[data-theme] .content .section-heading > div > p,
+body[data-theme] .content .panel-title p,
+body[data-theme] .content .chart-heading p,
+body[data-theme] .content .grade-panel-heading p,
+body[data-theme] .content .family-guidance p,
+body[data-theme] .content .insight-copy p,
+body[data-theme] .content .profile-person p,
+body[data-theme] .content .full-panel > p {
+  font-size: 12px;
+  line-height: 1.55;
+}
+body[data-theme] .content .eyebrow {
+  font-size: 10px;
+  line-height: 1.45;
+}
+body[data-theme] .content .section-heading h2 {
+  font-size: 17px;
+  line-height: 1.3;
+}
+body[data-theme] .content .panel-title h3,
+body[data-theme] .content .panel h3,
+body[data-theme] .content .grade-panel-heading h3 {
+  font-size: 14px;
+  line-height: 1.35;
+}
+body[data-theme] .content .metric-card > small,
+body[data-theme] .content .student-chip b,
+body[data-theme] .content .grade-line,
+body[data-theme] .content .emotion-line,
+body[data-theme] .content .emotion-row,
+body[data-theme] .content .subject,
+body[data-theme] .content .profile-progress > div,
+body[data-theme] .content .filter-btn,
+body[data-theme] .content .family-action,
+body[data-theme] .content .tab-pill,
+body[data-theme] .content .pro-subnav button,
+body[data-theme] .content .theme-option,
+body[data-theme] .content .soft-button,
+body[data-theme] .content .date-pill {
+  font-size: 11px;
+  line-height: 1.4;
+}
+body[data-theme] .content .metric-value {
+  font-size: 24px;
+}
+body[data-theme] .content .subject {
+  font-size: 12px;
+}
+body[data-theme] .content .profile-progress > div {
+  font-size: 9px;
+}
+body[data-theme] .content .metric-hint,
+body[data-theme] .content .student-chip small,
+body[data-theme] .content .grade-summary small,
+body[data-theme] .content .grade-summary span,
+body[data-theme] .content .subject small,
+body[data-theme] .content .ring-copy small,
+body[data-theme] .content .profile-score small,
+body[data-theme] .content .chart-heading > span,
+body[data-theme] .content .chart-pro-card .bar-group > b,
+body[data-theme] .content .chart-pro-card .bar-group small,
+body[data-theme] .content .report-card > small,
+body[data-theme] .content .report-meta span,
+body[data-theme] .content .context-card small,
+body[data-theme] .content .context-intro p,
+body[data-theme] .content .routine-card small,
+body[data-theme] .content .routine-card p,
+body[data-theme] .content .empty-state {
+  font-size: 9px;
+  line-height: 1.45;
+}
+body[data-theme] .content .metric-hint,
+body[data-theme] .content .inline-link,
+body[data-theme] .content .text-link {
+  color: var(--accent);
+}
+body[data-theme] .content .student-chip b,
+body[data-theme] .content .subject > span,
+body[data-theme] .content .subject > b,
+body[data-theme] .content .grade-line > span,
+body[data-theme] .content .emotion-line > span,
+body[data-theme] .content .emotion-row > span {
+  color: var(--ink);
+}
+body[data-theme]
+  .content
+  :is(.track, .grade-chart i, .radar-list i, .progress-track) {
+  min-height: 7px;
+}
+body[data-theme="light"]
+  .content
+  :is(.track, .grade-chart i, .radar-list i, .progress-track) {
+  background-color: #d5dee8 !important;
+}
+body[data-theme="rose"]
+  .content
+  :is(.track, .grade-chart i, .radar-list i, .progress-track) {
+  background-color: #dfd1d8 !important;
+}
+body[data-theme] :is(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  body[data-theme] .content .welcome-row h1 {
+    font-size: 24px;
+  }
+  body[data-theme] .content .welcome-row p,
+  body[data-theme] .content .section-heading > div > p,
+  body[data-theme] .content .panel-title p,
+  body[data-theme] .content .chart-heading p,
+  body[data-theme] .content .grade-panel-heading p,
+  body[data-theme] .content .family-guidance p,
+  body[data-theme] .content .insight-copy p,
+  body[data-theme] .content .profile-person p,
+  body[data-theme] .content .full-panel > p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 650px) {
+  body[data-theme] .content .date-pill {
+    font-size: 0;
+  }
+  body[data-theme] .content .welcome-row h1 {
+    font-size: 22px;
+  }
+  body[data-theme] .content .welcome-row p,
+  body[data-theme] .content .section-heading > div > p,
+  body[data-theme] .content .panel-title p,
+  body[data-theme] .content .chart-heading p,
+  body[data-theme] .content .grade-panel-heading p,
+  body[data-theme] .content .family-guidance p,
+  body[data-theme] .content .insight-copy p,
+  body[data-theme] .content .profile-person p,
+  body[data-theme] .content .full-panel > p {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  body[data-theme] .content .section-heading h2 {
+    font-size: 15px;
+  }
+  body[data-theme] .content .metric-value {
+    font-size: 22px;
+  }
+  body[data-theme] .content .panel-title h3,
+  body[data-theme] .content .panel h3,
+  body[data-theme] .content .grade-panel-heading h3 {
+    font-size: 13px;
+  }
+  body[data-theme] .content .metric-card > small,
+  body[data-theme] .content .student-chip b,
+  body[data-theme] .content .grade-line,
+  body[data-theme] .content .emotion-line,
+  body[data-theme] .content .emotion-row,
+  body[data-theme] .content .subject,
+  body[data-theme] .content .profile-progress > div,
+  body[data-theme] .content .filter-btn,
+  body[data-theme] .content .family-action {
+    font-size: 9px;
+  }
+  body[data-theme] .content .metric-hint,
+  body[data-theme] .content .student-chip small,
+  body[data-theme] .content .grade-summary small,
+  body[data-theme] .content .grade-summary span,
+  body[data-theme] .content .subject small,
+  body[data-theme] .content .ring-copy small,
+  body[data-theme] .content .profile-score small,
+  body[data-theme] .content .report-card > small,
+  body[data-theme] .content .report-meta span {
+    font-size: 8px;
+  }
+}
