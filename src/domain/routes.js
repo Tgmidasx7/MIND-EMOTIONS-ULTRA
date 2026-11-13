@@ -21,10 +21,14 @@ function cleanBase(base) {
   return segments.length ? `/${segments.join("/")}/` : "/";
 }
 
-export function appUrl(tab, studentId = 1, base = "/") {
+function versionPrefix(path) {
+  return /(?:^|\/)att1\.1(?:\/|$)/.test(path) ? "att1.1/" : "";
+}
+
+export function appUrl(tab, studentId = 1, base = "/", version = "") {
   const route = tabPaths[tab] || tabPaths.home;
   const prefix = cleanBase(base);
-  const url = `${prefix}${route}`;
+  const url = `${prefix}${version === "att1.1" ? "att1.1/" : ""}${route}`;
   const slug = studentSlugs[studentId];
   return slug && studentId !== 1 ? `${url}?filho=${slug}` : url;
 }
@@ -34,9 +38,10 @@ export function parseAppUrl(pathname, search = "", base = "/") {
   let relative = String(pathname || "/");
   if (relative.startsWith(prefix)) relative = relative.slice(prefix.length);
   else relative = relative.replace(/^\/+/, "");
-  relative = relative.replace(/\/+$/, "");
+  const version = versionPrefix(relative) ? "att1.1" : "current";
+  relative = relative.replace(/^att1\.1\/?/, "").replace(/\/+$/, "");
   const tab = pathTabs[relative] || "home";
   const params = new URLSearchParams(search);
   const studentId = slugStudents[params.get("filho")?.toLowerCase()] || 1;
-  return { tab, studentId };
+  return { tab, studentId, version };
 }

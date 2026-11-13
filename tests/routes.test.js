@@ -21,10 +21,25 @@ test("routes restore the active tab and selected child from a shared URL", () =>
       "?filho=manuela",
       "/MIND-EMOTIONS-ULTRA/",
     ),
-    { tab: "emotions", studentId: 3 },
+    { tab: "emotions", studentId: 3, version: "current" },
   );
   assert.deepEqual(
     parseAppUrl("/MIND-EMOTIONS-ULTRA/notas", "", "/MIND-EMOTIONS-ULTRA/"),
-    { tab: "grades", studentId: 1 },
+    { tab: "grades", studentId: 1, version: "current" },
+  );
+});
+
+test("Att 1.1 is a separate route and preserves profile plus tab navigation", () => {
+  assert.equal(
+    appUrl("grades", 3, "/MIND-EMOTIONS-ULTRA/", "att1.1"),
+    "/MIND-EMOTIONS-ULTRA/att1.1/notas?filho=manuela",
+  );
+  assert.deepEqual(
+    parseAppUrl(
+      "/MIND-EMOTIONS-ULTRA/att1.1/notas",
+      "?filho=manuela",
+      "/MIND-EMOTIONS-ULTRA/",
+    ),
+    { tab: "grades", studentId: 3, version: "att1.1" },
   );
 });

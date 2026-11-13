@@ -1,0 +1,213 @@
+/* Att 1.1: opt-in visual QA release. The original app remains untouched outside /att1.1. */
+body[data-version="att1.1"] {
+  --att-page: var(--base);
+  --att-surface: var(--card);
+  --att-raised: var(--card2);
+  --att-text: var(--ink);
+  --att-copy: var(--copy);
+  --att-muted: var(--muted);
+  --att-border: var(--line);
+  --att-accent: var(--accent);
+  --att-focus: #075bb5;
+}
+body[data-version="att1.1"][data-theme="dark"] {
+  --att-focus: #8edcff;
+}
+body[data-version="att1.1"][data-theme="rose"] {
+  --att-focus: #8f1747;
+}
+body[data-version="att1.1"] .app {
+  color: var(--att-text);
+  background: transparent;
+  font-size: 15px;
+}
+body[data-version="att1.1"] .content {
+  width: min(100%, 1600px);
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2.5vw, 36px);
+}
+body[data-version="att1.1"] .panel,
+body[data-version="att1.1"] .metric-card,
+body[data-version="att1.1"] .student-switcher,
+body[data-version="att1.1"] .family,
+body[data-version="att1.1"] .chat-panel,
+body[data-version="att1.1"] .quiz-card,
+body[data-version="att1.1"] .full-panel {
+  border: 1px solid var(--att-border);
+  background: var(--att-surface);
+  box-shadow: 0 8px 24px rgb(15 30 55 / 8%);
+}
+body[data-version="att1.1"] :where(p, .content small, .crumb, .eyebrow) {
+  color: var(--att-copy);
+}
+body[data-version="att1.1"] :where(button, input, textarea, select, a) {
+  font: inherit;
+}
+body[data-version="att1.1"]
+  :where(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid var(--att-focus) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--att-surface);
+  position: relative;
+  z-index: 2;
+}
+body[data-version="att1.1"] :where(button, .nav-item, .student-chip) {
+  min-height: 42px;
+}
+body[data-version="att1.1"] .subject {
+  background: var(--att-raised) !important;
+  color: var(--att-text) !important;
+  border: 1px solid var(--att-border);
+}
+body[data-version="att1.1"] .subject > span,
+body[data-version="att1.1"] .subject > b {
+  color: var(--att-text) !important;
+}
+body[data-version="att1.1"] .subject > small {
+  color: var(--att-muted) !important;
+}
+body[data-version="att1.1"] .track,
+body[data-version="att1.1"] .student-chip,
+body[data-version="att1.1"] .message {
+  background-color: var(--att-raised);
+  border-color: var(--att-border);
+}
+body[data-version="att1.1"] .version-switch {
+  align-self: center;
+  flex: 0 0 auto;
+  color: var(--att-accent);
+  background: var(--att-raised);
+  border: 1px solid var(--att-border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+body[data-version="att1.1"] .version-switch:hover {
+  filter: brightness(1.08);
+}
+/* Wider-screen grids: prevent fixed/min-content children from forcing overflow. */
+body[data-version="att1.1"]
+  :where(
+    .dashboard-grid,
+    .stats-grid,
+    .student-profile-summary,
+    .grade-summary-grid,
+    .emotion-grid,
+    .insight-grid
+  ) {
+  min-width: 0;
+}
+body[data-version="att1.1"]
+  :where(.panel, .metric-card, .student-switcher, .full-panel, .chat-panel) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 1440px) {
+  body[data-version="att1.1"] .content {
+    padding-inline: 36px;
+  }
+  body[data-version="att1.1"] .welcome-row h1 {
+    font-size: clamp(28px, 2.2vw, 34px);
+  }
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  body[data-version="att1.1"] .content {
+    padding-inline: 24px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  body[data-version="att1.1"] .content {
+    padding-inline: 18px;
+  }
+  body[data-version="att1.1"] .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body[data-version="att1.1"] .student-profile-summary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  body[data-version="att1.1"] .topbar {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  body[data-version="att1.1"] .crumb {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  body[data-version="att1.1"] .version-switch {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+  body[data-version="att1.1"] .content {
+    padding-inline: 14px;
+    padding-bottom: max(92px, env(safe-area-inset-bottom));
+  }
+  body[data-version="att1.1"] .welcome-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  body[data-version="att1.1"] .welcome-row h1 {
+    max-width: 100%;
+    font-size: clamp(23px, 6vw, 29px);
+    line-height: 1.2;
+  }
+  body[data-version="att1.1"]
+    :where(.stats-grid, .grade-summary-grid, .trigger-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body[data-version="att1.1"] .student-list {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+  body[data-version="att1.1"] .mobile-tabs {
+    overflow-x: auto;
+    padding-bottom: max(5px, env(safe-area-inset-bottom));
+  }
+  body[data-version="att1.1"] .mobile-tabs button {
+    flex: 0 0 auto;
+    min-width: 58px;
+    min-height: 52px;
+  }
+  body[data-version="att1.1"] .subject {
+    grid-template-columns: minmax(76px, 0.8fr) minmax(48px, 1fr) auto;
+    gap: 8px;
+  }
+  body[data-version="att1.1"] .subject > small {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 380px) {
+  body[data-version="att1.1"] .content {
+    padding-inline: 11px;
+  }
+  body[data-version="att1.1"] .top-actions .user {
+    display: none;
+  }
+  body[data-version="att1.1"] .version-switch {
+    max-width: 100px;
+    white-space: normal;
+    text-align: center;
+  }
+  body[data-version="att1.1"]
+    :where(.stats-grid, .grade-summary-grid, .trigger-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-version="att1.1"] *,
+  body[data-version="att1.1"] *::before,
+  body[data-version="att1.1"] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

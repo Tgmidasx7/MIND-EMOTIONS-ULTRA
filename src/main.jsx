@@ -52,7 +52,8 @@ function App() {
       import.meta.env.BASE_URL,
     ),
   );
-  const [students, setStudents] = useState(seedStudents),
+  const [version, setVersion] = useState(initialRoute.version),
+    [students, setStudents] = useState(seedStudents),
     [selected, setSelected] = useState(initialRoute.studentId),
     [tab, setTab] = useState(initialRoute.tab),
     [quizAnswers, setQuizAnswers] = useState({}),
@@ -77,14 +78,16 @@ function App() {
       );
       setTab(route.tab);
       setSelected(route.studentId);
+      setVersion(route.version);
     };
     window.addEventListener("popstate", syncRoute);
     return () => window.removeEventListener("popstate", syncRoute);
   }, []);
   React.useEffect(() => {
     document.body.dataset.theme = theme;
+    document.body.dataset.version = version;
     localStorage.setItem("mind-theme", theme);
-  }, [theme]);
+  }, [theme, version]);
   React.useEffect(() => {
     setSubTab(
       {
@@ -115,7 +118,7 @@ function App() {
   }).format(new Date());
   const navigateTab = (nextTab, studentId = selected) => {
     setTab(nextTab);
-    const url = appUrl(nextTab, studentId, import.meta.env.BASE_URL);
+    const url = appUrl(nextTab, studentId, import.meta.env.BASE_URL, version);
     if (`${window.location.pathname}${window.location.search}` !== url)
       window.history.pushState({}, "", url);
   };
@@ -225,7 +228,7 @@ function App() {
     );
   };
   return (
-    <div className="app">
+    <div className={`app ${version === "att1.1" ? "app-att11" : ""}`}>
       <aside className="sidebar">
         <div className="brand">
           <div className="brand-icon">
@@ -278,6 +281,24 @@ function App() {
             Área da família <ChevronRight size={15} />
             <b>{tabs.find((x) => x[0] === tab)?.[1]}</b>
           </div>
+          <a
+            className="version-switch"
+            target="_blank"
+            rel="noreferrer"
+            href={appUrl(
+              tab,
+              selected,
+              import.meta.env.BASE_URL,
+              version === "att1.1" ? "" : "att1.1",
+            )}
+            aria-label={
+              version === "att1.1"
+                ? "Voltar à versão principal"
+                : "Abrir versão Att 1.1"
+            }
+          >
+            {version === "att1.1" ? "Att 1.1 · nova" : "Experimentar Att 1.1"}
+          </a>
           <div
             className="theme-corner-wrapper"
             onBlur={(event) => {

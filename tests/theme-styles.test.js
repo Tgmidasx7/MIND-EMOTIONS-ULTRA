@@ -35,6 +35,21 @@ test("moderate typography and visible keyboard focus styles are loaded last", ()
     typeStyles,
     /:focus-visible[\s\S]*?outline: 2px solid var\(--accent\)/,
   );
-  assert.match(imports.trimEnd(), /@import "\.\/type-contrast\.css";$/);
+  assert.match(imports, /@import "\.\/type-contrast\.css";/);
+  assert.match(imports.trimEnd(), /@import "\.\/att11\.css";$/);
   assert.doesNotMatch(typeStyles, /\bzoom\s*:/i);
+});
+
+test("Att 1.1 has an isolated theme-token layer, responsive breakpoints and focus", () => {
+  const att11 = readFileSync(
+    new URL("../src/styles/att11.css", import.meta.url),
+    "utf8",
+  );
+  assert.match(att11, /body\[data-version="att1\.1"\]/);
+  assert.match(att11, /--att-surface: var\(--card\)/);
+  assert.match(att11, /@media \(max-width: 380px\)/);
+  assert.match(att11, /@media \(min-width: 1440px\)/);
+  assert.match(att11, /:focus-visible/);
+  assert.match(att11, /prefers-reduced-motion/);
+  assert.doesNotMatch(att11, /\bzoom\s*:/i);
 });
