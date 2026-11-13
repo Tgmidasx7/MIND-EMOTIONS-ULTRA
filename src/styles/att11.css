@@ -341,3 +341,88 @@ body[data-version="att1.1"] .profile-score b {
     height: 42px;
   }
 }
+
+/* Name-first student identity (no emoji/avatar glyphs beside student names). */
+body[data-version="att1.1"] .student-profile-summary {
+  grid-template-columns: minmax(0, 1fr) 82px 82px;
+}
+body[data-version="att1.1"] .student-chip {
+  gap: 12px;
+  min-width: 210px;
+  max-width: 250px;
+  padding: 10px 14px;
+}
+body[data-version="att1.1"] .student-chip > span {
+  flex: 1;
+  min-width: 0;
+}
+@media (min-width: 768px) {
+  body[data-version="att1.1"] .welcome-row h1 {
+    font-size: clamp(30px, 2.5vw, 38px);
+  }
+  body[data-version="att1.1"] .welcome-row p,
+  body[data-version="att1.1"] .profile-person p,
+  body[data-version="att1.1"] .section-heading > div > p,
+  body[data-version="att1.1"] .panel-title p,
+  body[data-version="att1.1"] .grade-panel-heading p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  body[data-version="att1.1"] .profile-person h2 {
+    font-size: clamp(23px, 2vw, 29px);
+  }
+  body[data-version="att1.1"] .student-chip b {
+    font-size: 16px;
+  }
+  body[data-version="att1.1"] .student-chip small {
+    font-size: 12px;
+  }
+  body[data-version="att1.1"] .section-heading h2,
+  body[data-version="att1.1"] .panel h3,
+  body[data-version="att1.1"] .panel-title h3,
+  body[data-version="att1.1"] .grade-panel-heading h3 {
+    font-size: 20px;
+  }
+  body[data-version="att1.1"] .metric-value {
+    font-size: 30px;
+  }
+  body[data-version="att1.1"] .metric-card > small,
+  body[data-version="att1.1"] .subject > span,
+  body[data-version="att1.1"] .subject > b,
+  body[data-version="att1.1"] .grade-line,
+  body[data-version="att1.1"] .emotion-line,
+  body[data-version="att1.1"] .emotion-row {
+    font-size: 14px;
+  }
+  body[data-version="att1.1"] .profile-progress > div {
+    font-size: 12px;
+  }
+  body[data-version="att1.1"] .profile-badges span {
+    font-size: 11px;
+    padding: 5px 9px;
+  }
+  body[data-version="att1.1"] .event b,
+  body[data-version="att1.1"] .family b,
+  body[data-version="att1.1"] .user b {
+    font-size: 15px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  body[data-version="att1.1"] .student-profile-summary {
+    grid-template-columns: minmax(0, 1fr) 70px 70px;
+  }
+}
+@media (max-width: 767px) {
+  body[data-version="att1.1"] .student-profile-summary {
+    grid-template-columns: minmax(0, 1fr) 64px 64px;
+  }
+}
+@media (max-width: 380px) {
+  body[data-version="att1.1"] .student-profile-summary {
+    grid-template-columns: minmax(0, 1fr) 54px 54px;
+  }
+  body[data-version="att1.1"] .student-chip {
+    min-width: 180px;
+    padding-inline: 10px;
+  }
+}

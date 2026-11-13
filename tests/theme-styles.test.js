@@ -66,3 +66,16 @@ test("Att 1.1 has an isolated theme-token layer, responsive breakpoints and focu
   );
   assert.doesNotMatch(att11, /\bzoom\s*:/i);
 });
+
+test("Att 1.1 uses name-first student identity and larger desktop typography", () => {
+  const app = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
+  const att11 = readFileSync(
+    new URL("../src/styles/att11.css", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(app, /s\.emoji|student\.emoji/);
+  assert.match(att11, /@media \(min-width: 768px\)/);
+  assert.match(att11, /student-chip b \{\s*font-size: 16px/);
+  assert.match(att11, /profile-person h2 \{\s*font-size: clamp\(23px/);
+  assert.match(att11, /grid-template-columns: minmax\(0, 1fr\) 82px 82px/);
+});

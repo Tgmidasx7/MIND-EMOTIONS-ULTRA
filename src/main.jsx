@@ -462,7 +462,6 @@ function App() {
                   onClick={() => changeStudent(s.id)}
                   className={`student-chip ${selected === s.id ? "chosen" : ""}`}
                 >
-                  <div className={`face ${s.color}`}>{s.emoji}</div>
                   <span>
                     <b>{s.name}</b>
                     <small>
@@ -478,9 +477,6 @@ function App() {
           </section>
           {tab !== "home" && (
             <section className="student-profile-summary">
-              <div className={`profile-face ${student.color}`}>
-                {student.emoji}
-              </div>
               <div className="profile-person">
                 <div className="profile-badges">
                   <span>{student.grade}</span>
@@ -1463,9 +1459,7 @@ function App() {
             </div>
             {students.map((s) => (
               <div className="compare-row" key={s.id}>
-                <span>
-                  {s.emoji} {s.name}
-                </span>
+                <span>{s.name}</span>
                 <b>{average(s).toFixed(1)}</b>
                 <b>{well(s)}%</b>
                 <b>{engagement(s)}%</b>
