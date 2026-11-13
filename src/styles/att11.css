@@ -211,3 +211,133 @@ body[data-version="att1.1"]
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Att 1.1 header hierarchy and theme trigger: pinned to the upper-right edge. */
+body[data-version="att1.1"] .topbar {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.4vw, 18px);
+  min-height: 68px;
+  padding-inline: clamp(14px, 2.5vw, 36px);
+  border-bottom: 1px solid var(--att-border);
+  background: var(--att-surface);
+  color: var(--att-text);
+}
+body[data-version="att1.1"] .topbar .crumb {
+  order: 1;
+  color: var(--att-copy);
+}
+body[data-version="att1.1"] .topbar .crumb b {
+  color: var(--att-text);
+  font-weight: 800;
+}
+body[data-version="att1.1"] .topbar .version-switch {
+  order: 2;
+}
+body[data-version="att1.1"] .topbar .top-actions {
+  order: 3;
+  margin-left: auto;
+}
+body[data-version="att1.1"] .topbar .theme-corner-wrapper {
+  order: 4;
+  margin-left: 0;
+}
+body[data-version="att1.1"] .theme-circle-trigger {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--att-text);
+  border-radius: 14px;
+  background: var(--att-surface);
+  color: var(--att-text);
+  box-shadow:
+    0 0 0 2px var(--att-surface),
+    0 2px 8px rgb(0 0 0 / 18%);
+}
+body[data-version="att1.1"] .theme-circle-trigger svg {
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+body[data-version="att1.1"] .theme-circle-trigger:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.93);
+}
+body[data-version="att1.1"] .theme-sidebar-popover {
+  background: var(--att-surface);
+  border: 2px solid var(--att-border);
+  color: var(--att-text);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 22%);
+}
+body[data-version="att1.1"] .theme-popover-title {
+  color: var(--att-text);
+  font-size: 14px;
+}
+body[data-version="att1.1"] .theme-option {
+  min-height: 44px;
+  color: var(--att-text);
+  font-size: 13px;
+}
+body[data-version="att1.1"] .theme-option.active {
+  color: var(--att-text);
+  background: var(--att-raised);
+  border: 2px solid var(--att-accent);
+}
+body[data-version="att1.1"] .theme-option:hover {
+  background: var(--att-raised);
+  border-color: var(--att-border);
+}
+body[data-version="att1.1"] .profile-person h2,
+body[data-version="att1.1"] .welcome-row h1,
+body[data-version="att1.1"] .section-heading h2,
+body[data-version="att1.1"] .panel h3,
+body[data-version="att1.1"] .panel-title h3,
+body[data-version="att1.1"] .grade-panel-heading h3,
+body[data-version="att1.1"] .student-chip b,
+body[data-version="att1.1"] .metric-value,
+body[data-version="att1.1"] .grade-summary b,
+body[data-version="att1.1"] .subject > span,
+body[data-version="att1.1"] .subject > b {
+  color: var(--att-text) !important;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+body[data-version="att1.1"] .profile-person h2 {
+  font-size: clamp(18px, 1.7vw, 22px);
+}
+body[data-version="att1.1"] .student-chip b,
+body[data-version="att1.1"] .subject > span {
+  font-size: 13px;
+}
+body[data-version="att1.1"] .section-heading h2,
+body[data-version="att1.1"] .panel h3 {
+  font-size: clamp(16px, 1.4vw, 19px);
+}
+body[data-version="att1.1"] .profile-badges span + span {
+  color: var(--att-text);
+  border-color: var(--att-border);
+  background: var(--att-raised);
+}
+body[data-version="att1.1"] .profile-score,
+body[data-version="att1.1"] .profile-progress {
+  border-color: var(--att-border);
+}
+body[data-version="att1.1"] .profile-score b {
+  color: var(--att-text);
+  font-weight: 850;
+}
+@media (max-width: 767px) {
+  body[data-version="att1.1"] .topbar {
+    min-height: 58px;
+  }
+  body[data-version="att1.1"] .topbar .top-actions {
+    margin-left: auto;
+  }
+  body[data-version="att1.1"] .topbar .theme-corner-wrapper {
+    margin-left: 0;
+  }
+  body[data-version="att1.1"] .theme-circle-trigger {
+    width: 42px;
+    height: 42px;
+  }
+}

@@ -51,5 +51,18 @@ test("Att 1.1 has an isolated theme-token layer, responsive breakpoints and focu
   assert.match(att11, /@media \(min-width: 1440px\)/);
   assert.match(att11, /:focus-visible/);
   assert.match(att11, /prefers-reduced-motion/);
+  assert.match(att11, /\.topbar \.theme-corner-wrapper \{\s*order: 4/);
+  assert.match(
+    att11,
+    /\.theme-circle-trigger \{[\s\S]*?background: var\(--att-surface\)/,
+  );
+  assert.match(
+    att11,
+    /\.theme-circle-trigger \{[\s\S]*?color: var\(--att-text\)/,
+  );
+  assert.match(
+    att11,
+    /profile-person h2[\s\S]*?color: var\(--att-text\) !important/,
+  );
   assert.doesNotMatch(att11, /\bzoom\s*:/i);
 });
